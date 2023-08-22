@@ -15,6 +15,3 @@ let server = http.listen(3000, function () {
     console.log("Sever running!")
     console.log("Server listenning on: " +host + " port: " + port);
 });
-
-
-
