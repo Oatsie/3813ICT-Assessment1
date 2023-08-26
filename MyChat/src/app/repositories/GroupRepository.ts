@@ -1,8 +1,8 @@
 import { Injectable, Predicate } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Group } from '../entities/Group';
+import { Group } from '../../../server/entities/Group';
 import { IGroupRepository } from './IGroupRepository';
-import { DataService } from '../services/data.service';
+import { DataService } from '../../src/app/services/data.service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { Group } from "../entities/Group";
+import { Group } from "../../../server/entities/Group";
 
 export interface IGroupRepository{
     getAllGroups(): Observable<Group[]>;
