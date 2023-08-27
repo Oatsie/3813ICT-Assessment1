@@ -1,43 +1,63 @@
-const crypto = require('node:crypto')
-const express = require('express');
+const crypto = require("node:crypto");
+//server set up
+const express = require("express");
+
+var cors = require("cors");
+
+// http set up
+const path = require("path");
+const bodyParser = require("body-parser");
+
+// app set up
 const app = express();
-const channelModel = require('./entities/Channel')
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, "../dist/my-chat/")));
 
-const path = require('path');
-const http = require('http').Server(app);
-const bodyParser = require('body-parser');
+const http = require("http").Server(app);
 
-const channelRepo = require('./repositories/ChannelRepository')
+// repo imports
+const channelModel = require("./entities/Channel");
+const {
+  createChannel,
+  getAllChannels,
+} = require("./repositories/ChannelRepository");
+const { getAllUsers } = require("./repositories/UserRepository");
 
-app.use (bodyParser.json());
-
-app.use(express.static(path.join(__dirname, '../dist/my-chat/')))
-
+// start server
 let server = http.listen(3000, function () {
-    let host = server.address().address;
-    let port = server.address().port;
-    console.log("Sever running!")
-    console.log("Server listenning on: " +host + " port: " + port);
+  let host = server.address().address;
+  let port = server.address().port;
+  console.log("Sever running!");
+  console.log("Server listenning on: " + host + " port: " + port);
 });
 
-// Assuming this is an async function itself (e.g., an async route handler in an Express.js app)
+// API endpoints
+async function logIn(username, password) {}
+
 async function createChannelRequest(name) {
-    try {
-        const channel = new channelModel.Channel(crypto.randomUUID().toString(), name);
-        var channels = await channelRepo.createChannel(channel); // Await the result here
-        console.log(channels); // Use the channels data here
-      } catch (error) {
-        console.error("Error:", error);
-      }
+  try {
+    const channel = new channelModel.Channel(
+      crypto.randomUUID().toString(),
+      name
+    );
+    var channels = await createChannel(channel);
+    console.log(channels);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 async function getChannelsRequest() {
-    try {
-      const channels = await channelRepo.getAllChannels(); // Await the result here
-      console.log(channels); // Use the channels data here
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  try {
+    const channels = await getAllChannels();
+    console.log(channels);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
-  
+app.get("/api/users", async function (req, res) {
+  var users = await getAllUsers();
+  res.send(users);
+});
