@@ -1,0 +1,36 @@
+.group-list {
+  background-color: #36393f;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Group role heading */
+.group-role-heading {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #43b581; /* You can adjust the color to your preference */
+}
+
+/* Individual group item */
+.group-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+/* Groupname */
+.group-groupname {
+  font-weight: bold;
+}
+
+/* Hover effect for group items */
+.group-item:hover {
+  background-color: #40444b;
+  cursor: pointer;
+}
