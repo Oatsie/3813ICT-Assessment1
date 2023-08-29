@@ -7,10 +7,32 @@ async function getAllUsers() {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Fectching all users");
 
     const db = client.db(dbName);
     var users = await db.collection("Users").find().toArray();
+
+    return users;
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+    throw err;
+  } finally {
+    client.close();
+  }
+}
+
+async function getUsersByGroupId(groupId) {
+  const client = new MongoClient(url);
+
+  try {
+    await client.connect();
+    console.log("Fetching users of group: " + groupId);
+
+    const db = client.db(dbName);
+    var users = await db
+      .collection("Users")
+      .find((x) => x.groups.find((g) => g._id == groupId))
+      .toArray();
 
     return users;
   } catch (err) {
@@ -26,7 +48,7 @@ async function findUserById(id) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Fetching user: " + id);
 
     const db = client.db(dbName);
     var users = await db.collection("Users").findOne({ _id: id }).toArray();
@@ -45,15 +67,12 @@ async function findUserByUsername(username) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Fetching user: " + username);
 
     const db = client.db(dbName);
-    var users = await db
-      .collection("Users")
-      .findOne({ username: username })
-      .toArray();
+    var user = null; //await db.collection("Users").findOne({ username: username });
 
-    return users;
+    return user;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -67,17 +86,22 @@ async function createUser(user) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Attempting to create user...");
 
     const db = client.db(dbName);
 
-    var localUser = findUserByUsername(user.username);
+    // var localUser = findUserByUsername(user.username);
 
-    if (localUser == null) return Error("Username is already taken");
+    // if (localUser != null) {
+    //   console.log("Username is already taken");
+    //   return Error("Username is already taken");
+    // }
 
     var result = await db.collection("Users").insertOne(user);
 
-    console.log("Inserted document with ID:", result.insertedId);
+    console.log("User created with ID:", result.insertedId);
+
+    return user;
   } catch (err) {
     console.error("Error:", err);
     throw err;
@@ -91,14 +115,15 @@ async function updateUser(user) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Attempting to update user: " + user._id);
 
     var localUser = findUserByUsername(user.username);
 
-    if (localUser == null) return Error("Username is already taken");
+    if (localUser != null) return Error("Username is already taken");
 
     const db = client.db(dbName);
     await db.collection("Users").updateOne({ _id: id }, user);
+    console.log("User updated");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -112,10 +137,12 @@ async function deleteUser(id) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Attempting to delete user: " + id);
 
     const db = client.db(dbName);
     await db.collection("Users").deleteOne({ _id: id });
+
+    console.log("User deleted");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -129,3 +156,4 @@ module.exports.createUser = createUser;
 module.exports.getUserById = findUserById;
 module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
+module.exports.getUsersByGroupId = getUsersByGroupId;

@@ -1,64 +1,10 @@
 <div class="user-list">
-  <div class="user-role-heading">Super Admins</div>
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Admin 1 Avatar"
-    />
-    <span class="user-username">Admin 1</span>
-    <span class="user-status user-online">Online</span>
-  </div>
-
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Admin 2 Avatar"
-    />
-    <span class="user-username">Admin 2</span>
-    <span class="user-status user-offline">Offline</span>
-  </div>
-
-  <div class="user-role-heading">Group Admins</div>
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Member 1 Avatar"
-    />
-    <span class="user-username">Member 1</span>
-    <span class="user-status user-online">Online</span>
-  </div>
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Member 2 Avatar"
-    />
-    <span class="user-username">Member 2</span>
-    <span class="user-status user-offline">Offline</span>
-  </div>
-
-  <div class="user-role-heading">Users</div>
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Member 1 Avatar"
-    />
-    <span class="user-username">Member 1</span>
-    <span class="user-status user-online">Online</span>
-  </div>
-  <div class="user-item">
-    <img
-      class="user-avatar"
-      src="assets/pandakungfu.jpg"
-      alt="Member 2 Avatar"
-    />
-    <span class="user-username">Member 2</span>
-    <span class="user-status user-offline">Offline</span>
-  </div>
+  <ul>
+    <li *ngFor="let user of users; index as i">
+      <span>{{ user?.username }}</span>
+    </li>
+  </ul>
 
   <button (click)="getAllUsers()">Refresh</button>
+  <button (click)="createUser('a', 'b', 'c', 'd')">Create User</button>
 </div>
