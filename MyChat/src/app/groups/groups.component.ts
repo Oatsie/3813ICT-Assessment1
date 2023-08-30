@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Group } from '../models/group';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/API/Session/session.service';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-groups',
@@ -10,6 +11,7 @@ import { SessionService } from '../Services/API/Session/session.service';
 })
 export class GroupsComponent {
   groups: Array<Group> = [];
+  trash = faTrashAlt;
 
   constructor(
     private apiService: ApiService,
@@ -23,6 +25,10 @@ export class GroupsComponent {
   setGroup(group: string) {
     this.session.setGroup(group);
     console.log('group comp set group: ' + group);
+  }
+
+  deleteGroup(groupId: string) {
+    this.apiService.deleteGroup(groupId);
   }
 
   getGroups(): void {

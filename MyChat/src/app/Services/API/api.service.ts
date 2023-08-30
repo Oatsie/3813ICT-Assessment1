@@ -32,6 +32,10 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/api/groups`, body);
   }
 
+  deleteGroup(groupId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/groups/${groupId}`);
+  }
+
   createUser(
     username: string,
     password: string,

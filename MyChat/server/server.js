@@ -137,3 +137,11 @@ app.post("/api/groups", async function (req, res) {
     res.status(500).json({ error: "Group creation failed" });
   }
 });
+
+// Delete Group
+app.delete("/api/groups/:groupId", async function (req, res) {
+  const groupId = req.params.groupId;
+
+  var result = await deleteGroup(groupId);
+  res.send(result);
+});

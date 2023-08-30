@@ -60,3 +60,22 @@
   background-color: #40444b;
   cursor: pointer;
 }
+
+/* CSS for showing the delete icon on hover */
+.group-item {
+  position: relative; /* Required for positioning the delete icon */
+}
+
+.delete-icon {
+  display: none; /* Hide the delete icon by default */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.group-item:hover .delete-icon {
+  display: inline-block; /* Show the delete icon on hover */
+  color: red; /* You can change the color to your preference */
+}

@@ -1,8 +1,17 @@
 <div class="group-list">
   <ul class="group-list">
     <div class="group-role-heading">Groups</div>
-    <li *ngFor="let group of groups" (click)="setGroup(group._id)">
+    <li
+      *ngFor="let group of groups"
+      class="group-item"
+      (click)="setGroup(group._id)"
+    >
       <span>{{ group?.name }}</span>
+      <fa-icon
+        [icon]="trash"
+        class="delete-icon"
+        (click)="deleteGroup(group._id)"
+      ></fa-icon>
     </li>
   </ul>
 
