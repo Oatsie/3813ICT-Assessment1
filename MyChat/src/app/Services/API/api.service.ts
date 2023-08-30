@@ -22,13 +22,15 @@ export class ApiService {
     username: string,
     password: string,
     email: string,
-    groupId: string
+    groupId: string,
+    role: string
   ): Observable<any> {
     var body = {
       username: username,
       password: password,
       email: email,
       groupId: groupId,
+      role: role,
     };
     return this.http.post(`${this.apiUrl}/api/users`, body);
   }

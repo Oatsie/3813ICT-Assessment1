@@ -12,6 +12,8 @@ import { Group } from '../models/group';
 })
 export class UsersComponent {
   users: Array<User> = [];
+  groupAdmins: Array<User> = [];
+  superAdmins: Array<User> = [];
   sessionGroup: Group | undefined = undefined;
   sessionUser: User | undefined = undefined;
 
@@ -39,8 +41,37 @@ export class UsersComponent {
   getGroupUsers(): void {
     this.apiService.getGroupUsers(this.sessionGroup!.id).subscribe(
       (users: Array<User>) => {
-        this.users = users;
-        console.log(this.users);
+        this.users = [];
+        this.groupAdmins = [];
+        this.superAdmins = [];
+
+        users.forEach((user) => {
+          if (
+            user.roles.some(
+              (x) =>
+                x.groupId == this.sessionGroup?.id && x.name == 'Super Admin'
+            )
+          ) {
+            this.superAdmins.push(user);
+          }
+          if (
+            user.roles.some(
+              (x) =>
+                x.groupId == this.sessionGroup?.id && x.name == 'Group Admin'
+            )
+          ) {
+            this.groupAdmins.push(user);
+          }
+          if (
+            user.roles.some(
+              (x) => x.groupId == this.sessionGroup?.id && x.name == 'User'
+            )
+          ) {
+            this.users.push(user);
+          }
+        });
+
+        console.log(users);
       },
       (error) => {
         console.error(error);
@@ -55,7 +86,7 @@ export class UsersComponent {
     groupId: string | undefined
   ): void {
     this.apiService
-      .createUser(username, password, email, groupId ?? '')
+      .createUser(username, password, email, groupId ?? '', 'User')
       .subscribe(
         (data) => {
           console.log(data);

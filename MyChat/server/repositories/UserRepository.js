@@ -70,7 +70,7 @@ async function findUserByUsername(username) {
     console.log("Fetching user: " + username);
 
     const db = client.db(dbName);
-    var user = null; //await db.collection("Users").findOne({ username: username });
+    var user = await db.collection("Users").findOne({ username: username });
 
     return user;
   } catch (err) {
@@ -89,13 +89,6 @@ async function createUser(user) {
     console.log("Attempting to create user...");
 
     const db = client.db(dbName);
-
-    // var localUser = findUserByUsername(user.username);
-
-    // if (localUser != null) {
-    //   console.log("Username is already taken");
-    //   return Error("Username is already taken");
-    // }
 
     var result = await db.collection("Users").insertOne(user);
 
@@ -157,3 +150,4 @@ module.exports.getUserById = findUserById;
 module.exports.updateUser = updateUser;
 module.exports.deleteUser = deleteUser;
 module.exports.getUsersByGroupId = getUsersByGroupId;
+module.exports.findUserByUsername = findUserByUsername;

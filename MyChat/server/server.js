@@ -28,6 +28,7 @@ const {
   getAllUsers,
   createUser,
   getUsersByGroupId,
+  findUserByUsername,
 } = require("./repositories/UserRepository");
 
 // start server
@@ -39,28 +40,26 @@ let server = http.listen(3000, function () {
 });
 
 // API endpoints
-async function logIn(username, password) {}
 
-async function createChannelRequest(name) {
+/** USER ENDPOINTS */
+// Login
+app.post("/api/users/login", async function (req, res) {
   try {
-    const channel = new channelModel.Channel(name);
-    var channels = await createChannel(channel);
-    console.log(channels);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+    const userData = req.body;
 
-async function getChannelsRequest() {
-  try {
-    const channels = await getAllChannels();
-    console.log(channels);
+    var localUser = await findUserByUsername(userData.username).then(() => {
+      if (localUser != null && localUser.password == userData.password) {
+        res.status(200).json(localUser);
+      } else {
+        res.status(400).json({ error: "Incorrect username or password" });
+      }
+    });
   } catch (error) {
-    console.error("Error:", error);
+    res.status(500).json({ error: "User creation failed" });
   }
-}
+});
 
-// Creates a new user
+// Create
 app.post("/api/users", async function (req, res) {
   try {
     const userData = req.body;
@@ -72,7 +71,17 @@ app.post("/api/users", async function (req, res) {
     );
 
     user.addGroup(userData.groupId);
+    var role = new roleModel.Role(userData.role, userData.groupId);
+    user.addRole(role);
 
+    // Check user name is not already taken
+    var localUser = await findUserByUsername(user.username).then(() => {
+      if (localUser != null) {
+        res.status(400).json({ error: "Username taken" });
+      }
+    });
+
+    // Create new user
     var newUser = await createUser(user).then(() => {
       if (newUser != null) {
         res.status(201).json(newUser);

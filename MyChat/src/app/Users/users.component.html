@@ -1,5 +1,14 @@
 <div class="user-list">
   <ul class="user-list">
+    <div class="user-role-heading">Super Admins</div>
+    <li *ngFor="let user of superAdmins">
+      <span>{{ user?.username }}</span>
+    </li>
+    <div class="user-role-heading">Group Admins</div>
+    <li *ngFor="let user of groupAdmins">
+      <span>{{ user?.username }}</span>
+    </li>
+    <div class="user-role-heading">Users</div>
     <li *ngFor="let user of users">
       <span>{{ user?.username }}</span>
     </li>
