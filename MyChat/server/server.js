@@ -30,6 +30,13 @@ const {
   getUsersByGroupId,
   findUserByUsername,
 } = require("./repositories/UserRepository");
+const {
+  getAllGroups,
+  getGroupById,
+  createGroup,
+  updateGroup,
+  deleteGroup,
+} = require("./repositories/GroupRepository");
 
 // start server
 let server = http.listen(3000, function () {
@@ -99,9 +106,34 @@ app.get("/api/users", async function (req, res) {
 });
 
 // Gets all users of a group
-app.get("/api/group/:groupId/users", async function (req, res) {
+app.get("/api/groups/:groupId/users", async function (req, res) {
   const groupId = req.params.groupId;
 
   var users = await getUsersByGroupId(groupId);
   res.send(users);
+});
+
+/** GROUP ENDPOINTS */
+// Gets all groups
+app.get("/api/groups", async function (req, res) {
+  var groups = await getAllGroups();
+  res.send(groups);
+});
+
+// Create group
+app.post("/api/groups", async function (req, res) {
+  try {
+    const groupData = req.body;
+
+    var group = new groupModel.Group(groupData.name);
+
+    // Create new group
+    var newGroup = await createGroup(group).then(() => {
+      if (newGroup != null) {
+        res.status(201).json(newGroup);
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Group creation failed" });
+  }
 });

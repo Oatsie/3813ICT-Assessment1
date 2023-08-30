@@ -34,6 +34,8 @@ async function getUsersByGroupId(groupId) {
       .find({ groups: { $elemMatch: { $eq: groupId } } })
       .toArray();
 
+    console.log(users.length + " users found!");
+
     return users;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);

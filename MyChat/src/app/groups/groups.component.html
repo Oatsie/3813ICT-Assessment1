@@ -1,19 +1,11 @@
 <div class="group-list">
-  <div class="group-role-heading">Groups</div>
+  <ul class="group-list">
+    <div class="group-role-heading">Groups</div>
+    <li *ngFor="let group of groups" (click)="setGroup(group._id)">
+      <span>{{ group?.name }}</span>
+    </li>
+  </ul>
 
-  <div class="group-item">
-    <span class="group-groupname">Group 1</span>
-  </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 2</span>
-  </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 3</span>
-  </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 4</span>
-  </div>
+  <button (click)="getGroups()">Refresh</button>
+  <button (click)="createGroup('Hogwarts')">Create Group</button>
 </div>

@@ -1,13 +1,9 @@
 export class Group {
-  id: string;
+  _id: string;
   name: string;
-  users: string[];
-  channels: string[];
 
-  constructor(id: string, name: string, users: string[], channels: string[]) {
-    this.id = id;
+  constructor(_id: string, name: string) {
+    this._id = _id;
     this.name = name;
-    this.users = users;
-    this.channels = channels;
   }
 }

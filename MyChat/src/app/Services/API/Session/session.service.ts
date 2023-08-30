@@ -10,8 +10,8 @@ import { User } from 'src/app/models/user';
 export class SessionService {
   constructor() {}
 
-  private currentGroup = new BehaviorSubject<Group | undefined>(
-    new Group('64ef1e8581491d68469c8d9f', 'test', [], [])
+  private currentGroup = new BehaviorSubject<string>(
+    '64ef1e8581491d68469c8d9f'
   );
   private currentChannel = new BehaviorSubject<Channel | undefined>(undefined);
   private currentUser = new BehaviorSubject<User | undefined>(undefined);
@@ -20,15 +20,16 @@ export class SessionService {
   channel$ = this.currentChannel.asObservable();
   user$ = this.currentUser.asObservable();
 
-  updateGroup(newGroup: Group) {
+  setGroup(newGroup: string) {
     this.currentGroup.next(newGroup);
+    console.log('Session service set group: ' + newGroup);
   }
 
-  updateChannel(newChannel: Channel) {
+  setChannel(newChannel: Channel) {
     this.currentChannel.next(newChannel);
   }
 
-  updateUser(newUser: User) {
+  setUser(newUser: User) {
     this.currentUser.next(newUser);
   }
 }

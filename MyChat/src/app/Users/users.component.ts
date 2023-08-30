@@ -14,7 +14,7 @@ export class UsersComponent {
   users: Array<User> = [];
   groupAdmins: Array<User> = [];
   superAdmins: Array<User> = [];
-  sessionGroup: Group | undefined = undefined;
+  sessionGroup: string = '';
   sessionUser: User | undefined = undefined;
 
   constructor(
@@ -25,6 +25,7 @@ export class UsersComponent {
   ngOnInit() {
     this.session.group$.subscribe((newGroup) => {
       this.sessionGroup = newGroup;
+      console.log('user comp subscription: ' + this.sessionGroup);
 
       if (this.sessionGroup != undefined) {
         this.getGroupUsers();
@@ -39,7 +40,7 @@ export class UsersComponent {
   }
 
   getGroupUsers(): void {
-    this.apiService.getGroupUsers(this.sessionGroup!.id).subscribe(
+    this.apiService.getGroupUsers(this.sessionGroup).subscribe(
       (users: Array<User>) => {
         this.users = [];
         this.groupAdmins = [];
@@ -48,23 +49,21 @@ export class UsersComponent {
         users.forEach((user) => {
           if (
             user.roles.some(
-              (x) =>
-                x.groupId == this.sessionGroup?.id && x.name == 'Super Admin'
+              (x) => x.groupId == this.sessionGroup && x.name == 'Super Admin'
             )
           ) {
             this.superAdmins.push(user);
           }
           if (
             user.roles.some(
-              (x) =>
-                x.groupId == this.sessionGroup?.id && x.name == 'Group Admin'
+              (x) => x.groupId == this.sessionGroup && x.name == 'Group Admin'
             )
           ) {
             this.groupAdmins.push(user);
           }
           if (
             user.roles.some(
-              (x) => x.groupId == this.sessionGroup?.id && x.name == 'User'
+              (x) => x.groupId == this.sessionGroup && x.name == 'User'
             )
           ) {
             this.users.push(user);
