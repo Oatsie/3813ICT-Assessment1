@@ -14,6 +14,10 @@ export class ApiService {
     return this.http.get<User[]>(`${this.apiUrl}/api/users`);
   }
 
+  getGroupUsers(groupId: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/api/group/${groupId}/users`);
+  }
+
   createUser(
     username: string,
     password: string,

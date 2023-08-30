@@ -18,10 +18,11 @@
 }
 
 /* Individual user item */
-.user-item {
+.user-list li {
   display: flex;
   align-items: center;
   padding: 8px;
+  font-weight: bold;
 }
 
 /* User avatar */
@@ -55,7 +56,7 @@
 }
 
 /* Hover effect for user items */
-.user-item:hover {
+.user-list li:hover {
   background-color: #40444b;
   cursor: pointer;
 }

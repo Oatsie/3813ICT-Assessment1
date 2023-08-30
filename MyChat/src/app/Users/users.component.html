@@ -1,10 +1,16 @@
 <div class="user-list">
-  <ul>
-    <li *ngFor="let user of users; index as i">
+  <ul class="user-list">
+    <li *ngFor="let user of users">
       <span>{{ user?.username }}</span>
     </li>
   </ul>
 
-  <button (click)="getAllUsers()">Refresh</button>
-  <button (click)="createUser('a', 'b', 'c', 'd')">Create User</button>
+  <button (click)="getGroupUsers()">Refresh</button>
+  <button
+    (click)="
+      createUser('Harry', 'Hazza123', 'hazza@test.com', sessionGroup?.id)
+    "
+  >
+    Create User
+  </button>
 </div>

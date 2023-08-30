@@ -31,7 +31,7 @@ async function getUsersByGroupId(groupId) {
     const db = client.db(dbName);
     var users = await db
       .collection("Users")
-      .find((x) => x.groups.find((g) => g._id == groupId))
+      .find({ groups: { $elemMatch: { $eq: groupId } } })
       .toArray();
 
     return users;

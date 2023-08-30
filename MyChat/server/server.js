@@ -24,7 +24,11 @@ const {
   createChannel,
   getAllChannels,
 } = require("./repositories/ChannelRepository");
-const { getAllUsers, createUser } = require("./repositories/UserRepository");
+const {
+  getAllUsers,
+  createUser,
+  getUsersByGroupId,
+} = require("./repositories/UserRepository");
 
 // start server
 let server = http.listen(3000, function () {
@@ -69,11 +73,9 @@ app.post("/api/users", async function (req, res) {
 
     user.addGroup(userData.groupId);
 
-    var newUser = await createUser(userData).then(() => {
+    var newUser = await createUser(user).then(() => {
       if (newUser != null) {
         res.status(201).json(newUser);
-      } else {
-        res.status(400).json({ error: "User name already taken" });
       }
     });
   } catch (error) {
