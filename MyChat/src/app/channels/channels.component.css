@@ -1,0 +1,36 @@
+.channel-list {
+  background-color: #59595a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  float: left;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Channel role heading */
+.channel-role-heading {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #43b581; /* You can adjust the color to your preference */
+}
+
+/* Individual channel item */
+.channel-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+/* Channelname */
+.channel-channelname {
+  font-weight: bold;
+}
+
+/* Hover effect for channel items */
+.channel-item:hover {
+  background-color: #40444b;
+  cursor: pointer;
+}
