@@ -13,23 +13,30 @@ export class SessionService {
   private currentGroup = new BehaviorSubject<string>(
     '64ef1e8581491d68469c8d9f'
   );
-  private currentChannel = new BehaviorSubject<Channel | undefined>(undefined);
-  private currentUser = new BehaviorSubject<User | undefined>(undefined);
+  private currentChannel = new BehaviorSubject<string>('');
+  private currentUser = new BehaviorSubject<User | undefined>(
+    new User('1', 'James', '1', '1', [], [])
+  );
+  private latestMessage = new BehaviorSubject<number>(0);
 
   group$ = this.currentGroup.asObservable();
   channel$ = this.currentChannel.asObservable();
   user$ = this.currentUser.asObservable();
+  message$ = this.latestMessage.asObservable();
 
   setGroup(newGroup: string) {
     this.currentGroup.next(newGroup);
-    console.log('Session service set group: ' + newGroup);
   }
 
-  setChannel(newChannel: Channel) {
+  setChannel(newChannel: string) {
     this.currentChannel.next(newChannel);
   }
 
   setUser(newUser: User) {
     this.currentUser.next(newUser);
+  }
+
+  setMessage(newMessage: number) {
+    this.latestMessage.next(newMessage);
   }
 }

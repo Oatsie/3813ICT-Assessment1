@@ -1,9 +1,8 @@
 .channel-list {
-  background-color: #59595a;
+  background-color: #415783;
   color: #fff;
   padding: 10px;
-  border-radius: 5px;
-  float: left;
+  float: right;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -18,10 +17,19 @@
 }
 
 /* Individual channel item */
-.channel-item {
+.channel-list li {
   display: flex;
   align-items: center;
   padding: 8px;
+  font-weight: bold;
+}
+
+/* Channel avatar */
+.channel-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 /* Channelname */
@@ -29,8 +37,44 @@
   font-weight: bold;
 }
 
+/* Channel status */
+.channel-status {
+  font-size: 12px;
+  color: #72767d;
+  margin-left: 5px;
+}
+
+/* Online status */
+.channel-online {
+  color: #43b581;
+}
+
+/* Offline status */
+.channel-offline {
+  color: #747f8d;
+}
+
 /* Hover effect for channel items */
-.channel-item:hover {
+.channel-list li:hover {
   background-color: #40444b;
   cursor: pointer;
+}
+
+/* CSS for showing the delete icon on hover */
+.channel-item {
+  position: relative; /* Required for positioning the delete icon */
+}
+
+.delete-icon {
+  display: none; /* Hide the delete icon by default */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.channel-item:hover .delete-icon {
+  display: inline-block; /* Show the delete icon on hover */
+  color: red; /* You can change the color to your preference */
 }

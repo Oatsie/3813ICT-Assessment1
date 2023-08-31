@@ -7,11 +7,13 @@
       (click)="setGroup(group._id)"
     >
       <span>{{ group?.name }}</span>
-      <fa-icon
-        [icon]="trash"
-        class="delete-icon"
-        (click)="deleteGroup(group._id)"
-      ></fa-icon>
+      <button class="delete-icon">
+        <fa-icon
+          [icon]="trash"
+          class="delete-icon"
+          (click)="deleteGroup(group._id)"
+        ></fa-icon>
+      </button>
     </li>
   </ul>
 

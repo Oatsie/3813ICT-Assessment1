@@ -1,19 +1,18 @@
 <div class="channel-list">
-  <div class="channel-role-heading">Channels</div>
+  <ul class="channel-list">
+    <div class="channel-role-heading">Channels</div>
+    <li
+      *ngFor="let channel of channels"
+      class="channel-item"
+      (click)="setChannel(channel._id)"
+    >
+      <span>{{ channel?.name }}</span>
+      <button class="delete-icon" (click)="deleteChannel(channel._id)">
+        <fa-icon [icon]="trash" class="delete-icon"></fa-icon>
+      </button>
+    </li>
+  </ul>
 
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 1</span>
-  </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 2</span>
-  </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 3</span>
-  </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 4</span>
-  </div>
+  <button (click)="getGroupChannels()">Refresh</button>
+  <button (click)="createChannel('Hogwarts')">Create Channel</button>
 </div>

@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../Services/API/api.service';
 import { User } from '../models/user';
-import { CommonModule } from '@angular/common';
-import { SessionService } from '../Services/API/Session/session.service';
-import { Group } from '../models/group';
+import { SessionService } from '../Services/Session/session.service';
 
 @Component({
   selector: 'app-users',
@@ -25,7 +23,6 @@ export class UsersComponent {
   ngOnInit() {
     this.session.group$.subscribe((newGroup) => {
       this.sessionGroup = newGroup;
-      console.log('user comp subscription: ' + this.sessionGroup);
 
       if (this.sessionGroup != undefined) {
         this.getGroupUsers();
@@ -40,6 +37,11 @@ export class UsersComponent {
   }
 
   getGroupUsers(): void {
+    if (this.sessionGroup == '' || this.sessionGroup == undefined) {
+      this.users = [];
+      return;
+    }
+
     this.apiService.getGroupUsers(this.sessionGroup).subscribe(
       (users: Array<User>) => {
         this.users = [];

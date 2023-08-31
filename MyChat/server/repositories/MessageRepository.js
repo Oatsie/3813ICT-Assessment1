@@ -2,7 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://127.0.0.1:27017";
 const dbName = "MyChat";
 
-async function getAllChannels() {
+async function getAllMessages() {
   const client = new MongoClient(url);
 
   try {
@@ -10,9 +10,9 @@ async function getAllChannels() {
     console.log("Connected successfully to server!");
 
     const db = client.db(dbName);
-    var channels = await db.collection("Channels").find().toArray();
+    var messages = await db.collection("Messages").find().toArray();
 
-    return channels;
+    return messages;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -21,22 +21,22 @@ async function getAllChannels() {
   }
 }
 
-async function getChannelsByGroupId(groupId) {
+async function getMessagesByChannelId(channelId) {
   const client = new MongoClient(url);
 
   try {
     await client.connect();
-    console.log("Fetching channels of group: " + groupId);
+    console.log("Fetching messages of channel: " + channelId);
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
-      .find({ groupId: groupId })
+    var messages = await db
+      .collection("Messages")
+      .find({ channelId: channelId })
       .toArray();
 
-    console.log(channels.length + " channels found!");
+    console.log(messages.length + " messages found!");
 
-    return channels;
+    return messages;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -45,7 +45,7 @@ async function getChannelsByGroupId(groupId) {
   }
 }
 
-async function getChannelById(id) {
+async function getMessageById(id) {
   const client = new MongoClient(url);
 
   try {
@@ -53,12 +53,12 @@ async function getChannelById(id) {
     console.log("Connected successfully to server!");
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
+    var messages = await db
+      .collection("Messages")
       .findOne({ _id: id })
       .toArray();
 
-    return channels;
+    return messages;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -67,7 +67,7 @@ async function getChannelById(id) {
   }
 }
 
-async function createChannel(channel) {
+async function createMessage(message) {
   const client = new MongoClient(url);
 
   try {
@@ -75,7 +75,7 @@ async function createChannel(channel) {
     console.log("Connected successfully to server!");
 
     const db = client.db(dbName);
-    var result = await db.collection("Channels").insertOne(channel);
+    var result = await db.collection("Messages").insertOne(message);
 
     console.log("Inserted document with ID:", result.insertedId);
   } catch (err) {
@@ -86,7 +86,7 @@ async function createChannel(channel) {
   }
 }
 
-async function updateChannel(channel) {
+async function updateMessage(message) {
   const client = new MongoClient(url);
 
   try {
@@ -94,12 +94,12 @@ async function updateChannel(channel) {
     console.log("Connected successfully to server!");
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
+    var messages = await db
+      .collection("Messages")
       .findOne({ _id: id })
       .toArray();
 
-    return channels;
+    return messages;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -108,7 +108,7 @@ async function updateChannel(channel) {
   }
 }
 
-async function deleteChannel(id) {
+async function deleteMessage(id) {
   const client = new MongoClient(url);
 
   try {
@@ -116,12 +116,12 @@ async function deleteChannel(id) {
     console.log("Connected successfully to server!");
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
+    var messages = await db
+      .collection("Messages")
       .findOne({ _id: id })
       .toArray();
 
-    return channels;
+    return messages;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -130,9 +130,9 @@ async function deleteChannel(id) {
   }
 }
 
-module.exports.getAllChannels = getAllChannels;
-module.exports.createChannel = createChannel;
-module.exports.getChannelById = getChannelById;
-module.exports.updateChannel = updateChannel;
-module.exports.deleteChannel = deleteChannel;
-module.exports.getChannelsByGroupId = getChannelsByGroupId;
+module.exports.getAllMessages = getAllMessages;
+module.exports.createMessage = createMessage;
+module.exports.getMessageById = getMessageById;
+module.exports.updateMessage = updateMessage;
+module.exports.deleteMessage = deleteMessage;
+module.exports.getMessagesByChannelId = getMessagesByChannelId;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Group } from '../models/group';
 import { ApiService } from '../Services/API/api.service';
-import { SessionService } from '../Services/API/Session/session.service';
+import { SessionService } from '../Services/Session/session.service';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

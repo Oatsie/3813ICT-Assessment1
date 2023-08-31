@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { Group } from 'src/app/models/group';
+import { Channel } from 'src/app/models/channel';
+import { Message } from 'src/app/models/message';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +23,18 @@ export class ApiService {
     );
   }
 
+  getGroupChannels(groupId: string): Observable<Array<Channel>> {
+    return this.http.get<Array<Channel>>(
+      `${this.apiUrl}/api/groups/${groupId}/channels`
+    );
+  }
+
+  getChannelMessages(channelId: string): Observable<Array<Message>> {
+    return this.http.get<Array<Message>>(
+      `${this.apiUrl}/api/channels/${channelId}/messages`
+    );
+  }
+
   getGroups(): Observable<Array<Group>> {
     return this.http.get<Array<Group>>(`${this.apiUrl}/api/groups/`);
   }
@@ -34,6 +48,35 @@ export class ApiService {
 
   deleteGroup(groupId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/groups/${groupId}`);
+  }
+
+  createChannel(name: string, groupId: string): Observable<any> {
+    var body = {
+      name: name,
+      groupId: groupId,
+    };
+    return this.http.post(`${this.apiUrl}/api/channels`, body);
+  }
+
+  deleteChannel(channelId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/channels/${channelId}`);
+  }
+
+  createMessage(
+    userId: string,
+    author: string,
+    channelId: string,
+    content: string,
+    time: number
+  ): Observable<any> {
+    var body = {
+      userId: userId,
+      author: author,
+      channelId: channelId,
+      content: content,
+      time: time,
+    };
+    return this.http.post(`${this.apiUrl}/api/messages`, body);
   }
 
   createUser(

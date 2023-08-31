@@ -1,1 +1,4 @@
-<div class="message-container"></div>
+<div class="message-container">
+  <input class="message-input" [(ngModel)]="messageText" />
+  <button class="submit-button" (click)="createMessage()">Send</button>
+</div>

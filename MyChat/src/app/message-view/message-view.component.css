@@ -3,9 +3,8 @@
   background-color: #2f3136;
   color: #fff;
   padding: 10px;
-  border-radius: 5px;
   overflow-y: scroll; /* Add a scrollbar when content overflows */
-  height: 90vh; /* Set a maximum height for the message area */
+  height: 95vh; /* Set a maximum height for the message area */
   width: 100%;
 }
 
@@ -25,7 +24,11 @@
 
 /* Message content */
 .message-content {
-  flex-grow: 1; /* Take up all available space in the message */
+  flex-grow: 1;
+}
+
+.message-content li {
+  list-style: none;
 }
 
 /* Message username */
@@ -45,6 +48,6 @@
 }
 
 /* Hover effect for messages */
-.message:hover {
+.message li:hover {
   background-color: #40444b;
 }
