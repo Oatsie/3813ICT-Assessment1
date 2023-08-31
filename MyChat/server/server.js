@@ -96,9 +96,7 @@ app.post("/api/users", async function (req, res) {
 
     // Create new user
     var newUser = await createUser(user).then(() => {
-      if (newUser != null) {
-        res.status(201).json(newUser);
-      }
+      res.status(201).json(newUser);
     });
   } catch (error) {
     res.status(500).json({ error: "User creation failed" });
@@ -135,9 +133,7 @@ app.post("/api/groups", async function (req, res) {
 
     // Create new group
     var newGroup = await createGroup(group).then(() => {
-      if (newGroup != null) {
-        res.status(201).json(newGroup);
-      }
+      res.status(201).json(newGroup);
     });
   } catch (error) {
     res.status(500).json({ error: "Group creation failed" });
@@ -148,8 +144,9 @@ app.post("/api/groups", async function (req, res) {
 app.delete("/api/groups/:groupId", async function (req, res) {
   const groupId = req.params.groupId;
 
-  var result = await deleteGroup(groupId);
-  res.send(result);
+  var result = await deleteGroup(groupId).then(() => {
+    res.send(result);
+  });
 });
 
 /** CHANNEL ENDPOINTS */
@@ -165,9 +162,7 @@ app.post("/api/channels", async function (req, res) {
 
     // Create new channel
     var newChannel = await createChannel(channel).then(() => {
-      if (newChannel != null) {
-        res.status(201).json(newChannel);
-      }
+      res.status(201).json(newChannel);
     });
   } catch (error) {
     res.status(500).json({ error: "Channel creation failed" });
@@ -178,8 +173,9 @@ app.post("/api/channels", async function (req, res) {
 app.delete("/api/channels/:channelId", async function (req, res) {
   const channelId = req.params.channelId;
 
-  var result = await deleteChannel(channelId);
-  res.send(result);
+  var result = await deleteChannel(channelId).then(() => {
+    res.send(result);
+  });
 });
 
 // Gets all channels of a group
@@ -206,9 +202,7 @@ app.post("/api/messages", async function (req, res) {
 
     // Create new message
     var newMessage = await createMessage(message).then(() => {
-      if (newMessage != null) {
-        res.status(201).json(newMessage);
-      }
+      res.status(201).json(newMessage);
     });
   } catch (error) {
     res.status(500).json({ error: "Message creation failed" });
