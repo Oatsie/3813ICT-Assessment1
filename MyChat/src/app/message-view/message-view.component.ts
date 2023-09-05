@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Message } from '../models/message';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { User } from '../models/user';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-message-view',
   templateUrl: './message-view.component.html',
   styleUrls: ['./message-view.component.css'],
 })
-export class MessageViewComponent {
+export class MessageViewComponent implements OnInit, OnDestroy {
+  destroyed$ = new Subject<boolean>();
   messages: Array<Message> = [];
   sessionChannel: string = '';
   sessionUser: User | undefined = undefined;
@@ -20,15 +22,17 @@ export class MessageViewComponent {
   ) {}
 
   ngOnInit() {
-    this.session.channel$.subscribe((newChannel) => {
-      this.sessionChannel = newChannel;
+    this.session.channel$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((newChannel) => {
+        this.sessionChannel = newChannel;
 
-      if (this.sessionChannel != undefined) {
-        this.getChannelMessages();
-      } else {
-        this.messages = [];
-      }
-    });
+        if (this.sessionChannel != undefined) {
+          this.getChannelMessages();
+        } else {
+          this.messages = [];
+        }
+      });
 
     this.session.message$.subscribe(() => {
       this.getChannelMessages();
@@ -51,5 +55,9 @@ export class MessageViewComponent {
         console.error(error);
       }
     );
+  }
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

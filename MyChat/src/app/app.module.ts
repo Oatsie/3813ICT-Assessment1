@@ -7,17 +7,22 @@ import { GroupsModule } from './groups/groups.module';
 import { ChannelsModule } from './channels/channels.module';
 import { MessageViewModule } from './message-view/message-view.module';
 import { MessageCreateModule } from './message-create/message-create.module';
+import { LoginModule } from './login/login.module';
+import { MainComponent } from './main/main.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, MainComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    ReactiveFormsModule,
     UsersModule,
     GroupsModule,
     ChannelsModule,
     MessageViewModule,
     MessageCreateModule,
+    LoginModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

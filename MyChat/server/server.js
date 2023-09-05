@@ -209,7 +209,7 @@ app.post("/api/messages", async function (req, res) {
   }
 });
 
-// Gets all messages of a group
+// Gets all messages of a channel
 app.get("/api/channels/:channelId/messages", async function (req, res) {
   const channelId = req.params.channelId;
 

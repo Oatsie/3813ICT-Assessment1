@@ -12,8 +12,8 @@ export class UsersComponent {
   users: Array<User> = [];
   groupAdmins: Array<User> = [];
   superAdmins: Array<User> = [];
-  sessionGroup: string = '';
-  sessionUser: User | undefined = undefined;
+  sessionGroup: string;
+  sessionUser: User;
 
   constructor(
     private apiService: ApiService,
@@ -50,21 +50,21 @@ export class UsersComponent {
 
         users.forEach((user) => {
           if (
-            user.roles.some(
+            user?.roles?.some(
               (x) => x.groupId == this.sessionGroup && x.name == 'Super Admin'
             )
           ) {
             this.superAdmins.push(user);
           }
           if (
-            user.roles.some(
+            user?.roles?.some(
               (x) => x.groupId == this.sessionGroup && x.name == 'Group Admin'
             )
           ) {
             this.groupAdmins.push(user);
           }
           if (
-            user.roles.some(
+            user?.roles?.some(
               (x) => x.groupId == this.sessionGroup && x.name == 'User'
             )
           ) {

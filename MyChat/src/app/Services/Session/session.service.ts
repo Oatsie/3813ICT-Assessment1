@@ -14,9 +14,14 @@ export class SessionService {
     '64ef1e8581491d68469c8d9f'
   );
   private currentChannel = new BehaviorSubject<string>('');
-  private currentUser = new BehaviorSubject<User | undefined>(
-    new User('1', 'James', '1', '1', [], [])
-  );
+  private currentUser = new BehaviorSubject<User>({
+    _id: '1',
+    username: 'James',
+    password: '1',
+    email: '1',
+    groups: [],
+    roles: [],
+  });
   private latestMessage = new BehaviorSubject<number>(0);
 
   group$ = this.currentGroup.asObservable();

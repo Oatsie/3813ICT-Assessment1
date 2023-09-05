@@ -63,15 +63,15 @@ export class ApiService {
   }
 
   createMessage(
-    userId: string,
-    author: string,
-    channelId: string,
-    content: string,
-    time: number
+    userId?: string,
+    username?: string,
+    channelId?: string,
+    content?: string,
+    time?: number
   ): Observable<any> {
     var body = {
       userId: userId,
-      author: author,
+      username: username,
       channelId: channelId,
       content: content,
       time: time,

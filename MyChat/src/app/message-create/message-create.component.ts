@@ -9,9 +9,9 @@ import { SessionService } from '../Services/Session/session.service';
   styleUrls: ['./message-create.component.css'],
 })
 export class MessageCreateComponent {
-  sessionChannel: string = '';
-  sessionUser: User | undefined = undefined;
-  messageText: string = '';
+  sessionChannel: string;
+  sessionUser: User;
+  messageText: string;
   constructor(
     private apiService: ApiService,
     private session: SessionService

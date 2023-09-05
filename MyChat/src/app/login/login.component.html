@@ -1,0 +1,26 @@
+<div class="login-container">
+  <div class="login-box">
+    <h1 *ngIf="!registerUser">Welcome Back!</h1>
+    <h1 *ngIf="registerUser">Register</h1>
+    <div *ngIf="!registerUser">
+      <form>
+        <input type="text" placeholder="Username" />
+        <input type="password" placeholder="Password" />
+      </form>
+    </div>
+    <div *ngIf="registerUser">
+      <form [formGroup]="registrationForm">
+        <input formControlName="username" type="text" placeholder="Username" />
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+        />
+        <input formControlName="email" type="Email" placeholder="Email" />
+      </form>
+    </div>
+    <button *ngIf="!registerUser">Login</button>
+    <button *ngIf="registerUser" (click)="ToggleLogin()">Back</button>
+    <button (click)="ToggleRegister()">Register</button>
+  </div>
+</div>
