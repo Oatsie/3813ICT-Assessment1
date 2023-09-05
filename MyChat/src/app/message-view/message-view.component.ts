@@ -13,8 +13,8 @@ import { Subject, takeUntil } from 'rxjs';
 export class MessageViewComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<boolean>();
   messages: Array<Message> = [];
-  sessionChannel: string = '';
-  sessionUser: User | undefined = undefined;
+  sessionChannel: string;
+  sessionUser: User;
 
   constructor(
     private apiService: ApiService,

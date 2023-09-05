@@ -12,7 +12,7 @@ import { SessionService } from '../Services/Session/session.service';
 export class ChannelsComponent {
   channels: Array<Channel> = [];
   trash = faTrashAlt;
-  sessionGroup: string = '';
+  sessionGroup: string;
 
   constructor(
     private apiService: ApiService,
