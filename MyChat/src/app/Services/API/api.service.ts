@@ -46,6 +46,14 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/api/groups`, body);
   }
 
+  login(username: string, password: string): Observable<any> {
+    var body = {
+      username: username,
+      password: password,
+    };
+    return this.http.post(`${this.apiUrl}/api/users/login`, body);
+  }
+
   deleteGroup(groupId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/groups/${groupId}`);
   }

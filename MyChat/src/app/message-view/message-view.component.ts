@@ -4,6 +4,7 @@ import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { User } from '../models/user';
 import { Subject, takeUntil } from 'rxjs';
+import { RefreshService } from '../Services/Refresh/refresh.service';
 
 @Component({
   selector: 'app-message-view',
@@ -18,7 +19,8 @@ export class MessageViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private session: SessionService
+    private session: SessionService,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
@@ -34,7 +36,7 @@ export class MessageViewComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.session.message$.subscribe(() => {
+    this.refresh.message$.subscribe(() => {
       this.getChannelMessages();
     });
   }

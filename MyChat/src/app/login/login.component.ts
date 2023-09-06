@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { User } from '../models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +16,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   user: User;
   registerUser: boolean;
   registrationForm: FormGroup;
+  fail: boolean;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,6 +51,25 @@ export class LoginComponent implements OnInit, OnDestroy {
         ''
       );
     }
+  }
+
+  login() {
+    const user = {
+      username: this.registrationForm?.get('username')?.value,
+      password: this.registrationForm?.get('password')?.value,
+    };
+
+    this.apiService
+      .login(user.username, user.password)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((res) => {
+        if (res) {
+          this.session.setUser(res);
+          this.router.navigate(['/home']);
+        }
+      });
+
+    this.fail = true;
   }
   createRegistrationForm(): void {
     this.registrationForm = this.fb.group({

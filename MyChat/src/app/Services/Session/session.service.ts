@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Channel } from 'src/app/models/channel';
-import { Group } from 'src/app/models/group';
 import { User } from 'src/app/models/user';
 
 @Injectable({
@@ -10,24 +8,20 @@ import { User } from 'src/app/models/user';
 export class SessionService {
   constructor() {}
 
-  private currentGroup = new BehaviorSubject<string>(
-    '64ef1e8581491d68469c8d9f'
-  );
+  private currentGroup = new BehaviorSubject<string>('');
   private currentChannel = new BehaviorSubject<string>('');
   private currentUser = new BehaviorSubject<User>({
-    _id: '1',
-    username: 'James',
-    password: '1',
-    email: '1',
+    _id: '',
+    username: '',
+    password: '',
+    email: '',
     groups: [],
     roles: [],
   });
-  private latestMessage = new BehaviorSubject<number>(0);
 
   group$ = this.currentGroup.asObservable();
   channel$ = this.currentChannel.asObservable();
   user$ = this.currentUser.asObservable();
-  message$ = this.latestMessage.asObservable();
 
   setGroup(newGroup: string) {
     this.currentGroup.next(newGroup);
@@ -39,9 +33,5 @@ export class SessionService {
 
   setUser(newUser: User) {
     this.currentUser.next(newUser);
-  }
-
-  setMessage(newMessage: number) {
-    this.latestMessage.next(newMessage);
   }
 }

@@ -1,35 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Channel } from '../models/channel';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
+import { Subject, takeUntil } from 'rxjs';
+import { RefreshService } from '../Services/Refresh/refresh.service';
 
 @Component({
   selector: 'app-channels',
   templateUrl: './channels.component.html',
   styleUrls: ['./channels.component.css'],
 })
-export class ChannelsComponent {
+export class ChannelsComponent implements OnInit, OnDestroy {
+  destroyed$ = new Subject<boolean>();
   channels: Array<Channel> = [];
   trash = faTrashAlt;
   sessionGroup: string;
 
   constructor(
     private apiService: ApiService,
-    private session: SessionService
+    private session: SessionService,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
-    this.session.group$.subscribe((newGroup) => {
-      this.sessionGroup = newGroup;
+    this.session.group$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((newGroup) => {
+        this.sessionGroup = newGroup;
 
-      if (this.sessionGroup != undefined && this.sessionGroup != '') {
-        this.getGroupChannels();
-      } else {
-        this.channels = [];
-      }
+        if (this.sessionGroup != undefined && this.sessionGroup != '') {
+          this.getGroupChannels();
+        } else {
+          this.channels = [];
+        }
 
-      this.session.setChannel('');
+        this.session.setChannel('');
+      });
+
+    this.refresh.channel$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+      this.getGroupChannels();
     });
   }
 
@@ -62,12 +72,18 @@ export class ChannelsComponent {
     if (this.sessionGroup == '' || this.sessionGroup == undefined) return;
 
     this.apiService.createChannel(name, this.sessionGroup).subscribe(
-      (data) => {
-        console.log(data);
+      () => {
+        let time = Date.now();
+        this.refresh.refreshChannels(time);
       },
       (error) => {
         console.error(error);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

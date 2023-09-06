@@ -60,13 +60,15 @@ app.post("/api/users/login", async function (req, res) {
   try {
     const userData = req.body;
 
-    var localUser = await findUserByUsername(userData.username).then(() => {
-      if (localUser != null && localUser.password == userData.password) {
-        res.status(200).json(localUser);
-      } else {
-        res.status(400).json({ error: "Incorrect username or password" });
-      }
-    });
+    var localUser = await findUserByUsername(userData.username);
+
+    if (localUser != null && localUser.password == userData.password) {
+      console.log("Successfully logged in");
+      res.status(200).json(localUser);
+    } else {
+      console.log("Log in Failed");
+      res.status(400).json({ error: "Incorrect username or password" });
+    }
   } catch (error) {
     res.status(500).json({ error: "User creation failed" });
   }

@@ -73,7 +73,7 @@ async function findUserByUsername(username) {
 
     const db = client.db(dbName);
     var user = await db.collection("Users").findOne({ username: username });
-
+    console.log(user);
     return user;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);

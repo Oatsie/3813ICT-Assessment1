@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { User } from '../models/user';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
+import { RefreshService } from '../Services/Refresh/refresh.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-message-create',
@@ -12,9 +14,11 @@ export class MessageCreateComponent {
   sessionChannel: string;
   sessionUser: User;
   messageText: string;
+  destroyed$ = new Subject<boolean>();
   constructor(
     private apiService: ApiService,
-    private session: SessionService
+    private session: SessionService,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
@@ -48,8 +52,8 @@ export class MessageCreateComponent {
         time
       )
       .subscribe(
-        (data) => {
-          console.log(data);
+        () => {
+          this.refresh.refreshMessages(time);
         },
         (error) => {
           console.error(error);
@@ -57,6 +61,5 @@ export class MessageCreateComponent {
       );
 
     this.messageText = '';
-    this.session.setMessage(time);
   }
 }

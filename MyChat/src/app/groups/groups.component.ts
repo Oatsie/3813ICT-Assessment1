@@ -1,25 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Group } from '../models/group';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { RefreshService } from '../Services/Refresh/refresh.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css'],
 })
-export class GroupsComponent {
+export class GroupsComponent implements OnInit, OnDestroy {
+  destroyed$ = new Subject<boolean>();
   groups: Array<Group> = [];
   trash = faTrashAlt;
 
   constructor(
     private apiService: ApiService,
-    private session: SessionService
+    private session: SessionService,
+    private refresh: RefreshService
   ) {}
 
   ngOnInit() {
     this.getGroups();
+
+    this.refresh.group$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+      this.getGroups();
+    });
   }
 
   setGroup(group: string) {
@@ -45,12 +53,18 @@ export class GroupsComponent {
 
   createGroup(name: string): void {
     this.apiService.createGroup(name).subscribe(
-      (data) => {
-        console.log(data);
+      () => {
+        let time = Date.now();
+        this.refresh.refreshGroups(time);
       },
       (error) => {
         console.error(error);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
