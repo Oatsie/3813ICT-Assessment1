@@ -1,5 +1,5 @@
 <div class="user-list">
-  <ul class="user-list">
+  <ul *ngIf="sessionUserRole > 0" class="user-list">
     <div class="user-role-heading">Super Admins</div>
     <li *ngFor="let user of superAdmins">
       <span>{{ user?.username }}</span>
@@ -14,9 +14,16 @@
     </li>
   </ul>
 
-  <button
-    (click)="createUser('Harry', 'Hazza123', 'hazza@test.com', sessionGroup)"
-  >
-    Create User
-  </button>
+  <div *ngIf="sessionUserRole > 1">
+    <button
+      (click)="createUser('Harry', 'Hazza123', 'hazza@test.com', sessionGroup)"
+    >
+      Create User
+    </button>
+  </div>
+
+  <div class="user-panel">
+    <h4>{{ sessionUser.username }}</h4>
+    <button (click)="logout()">Logout</button>
+  </div>
 </div>

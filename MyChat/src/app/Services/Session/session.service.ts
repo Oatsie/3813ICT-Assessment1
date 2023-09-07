@@ -10,6 +10,7 @@ export class SessionService {
 
   private currentGroup = new BehaviorSubject<string>('');
   private currentChannel = new BehaviorSubject<string>('');
+  private currentRole = new BehaviorSubject<number>(0);
   private currentUser = new BehaviorSubject<User>({
     _id: '',
     username: '',
@@ -22,9 +23,14 @@ export class SessionService {
   group$ = this.currentGroup.asObservable();
   channel$ = this.currentChannel.asObservable();
   user$ = this.currentUser.asObservable();
+  role$ = this.currentRole.asObservable();
 
   setGroup(newGroup: string) {
     this.currentGroup.next(newGroup);
+    let role =
+      this.currentUser.value.roles?.find((x) => x.groupId == newGroup)?.name ??
+      '';
+    this.setRole(role);
   }
 
   setChannel(newChannel: string) {
@@ -33,5 +39,28 @@ export class SessionService {
 
   setUser(newUser: User) {
     this.currentUser.next(newUser);
+  }
+
+  setRole(newRole: string) {
+    let role = 0;
+    switch (newRole) {
+      case 'User': {
+        role = 1;
+        break;
+      }
+      case 'Group Admin': {
+        role = 2;
+        break;
+      }
+      case 'Super Admin': {
+        role = 3;
+        break;
+      }
+      default: {
+        role = 0;
+        break;
+      }
+    }
+    this.currentRole.next(role);
   }
 }

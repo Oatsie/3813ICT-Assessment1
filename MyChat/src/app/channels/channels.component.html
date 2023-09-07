@@ -1,5 +1,5 @@
 <div class="channel-list">
-  <ul class="channel-list">
+  <ul *ngIf="sessionUserRole > 0" class="channel-list">
     <div class="channel-role-heading">Channels</div>
     <li
       *ngFor="let channel of channels"
@@ -13,5 +13,10 @@
     </li>
   </ul>
 
-  <button (click)="createChannel('Hogwarts')">Create Channel</button>
+  <button *ngIf="sessionUserRole == 0 && sessionGroup != ''">
+    Request to Join Group
+  </button>
+  <div *ngIf="sessionUserRole > 1">
+    <button (click)="createChannel('Hogwarts')">Create Channel</button>
+  </div>
 </div>

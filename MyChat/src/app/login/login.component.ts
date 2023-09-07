@@ -16,7 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   user: User;
   registerUser: boolean;
   registrationForm: FormGroup;
-  fail: boolean;
+  loginFail: boolean;
+  registerFail: boolean;
 
   constructor(
     private apiService: ApiService,
@@ -43,14 +44,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         password: this.registrationForm?.get('password')?.value,
         email: this.registrationForm?.get('email')?.value,
       };
-      this.apiService.createUser(
-        user.username,
-        user.password,
-        user.email,
-        '',
-        ''
-      );
+      this.apiService
+        .createUser(user.username, user.password, user.email, '', '')
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((res) => {
+          if (res) {
+            this.login();
+          }
+        });
     }
+    this.registerFail = true;
   }
 
   login() {
@@ -69,7 +72,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.fail = true;
+    this.loginFail = true;
   }
   createRegistrationForm(): void {
     this.registrationForm = this.fb.group({

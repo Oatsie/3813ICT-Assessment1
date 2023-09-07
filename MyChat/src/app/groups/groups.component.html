@@ -16,6 +16,7 @@
       </button>
     </li>
   </ul>
-
-  <button (click)="createGroup('Hogwarts')">Create Group</button>
+  <div *ngIf="sessionUserRole > 1">
+    <button (click)="createGroup('Hogwarts')">Create Group</button>
+  </div>
 </div>

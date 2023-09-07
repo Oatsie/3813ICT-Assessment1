@@ -15,6 +15,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<boolean>();
   groups: Array<Group> = [];
   trash = faTrashAlt;
+  sessionUserRole: number;
 
   constructor(
     private apiService: ApiService,
@@ -28,11 +29,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.refresh.group$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.getGroups();
     });
+
+    this.session.role$.pipe(takeUntil(this.destroyed$)).subscribe((newRole) => {
+      this.sessionUserRole = newRole;
+    });
   }
 
   setGroup(group: string) {
     this.session.setGroup(group);
-    console.log('group comp set group: ' + group);
   }
 
   deleteGroup(groupId: string) {

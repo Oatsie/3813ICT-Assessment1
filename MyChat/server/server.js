@@ -90,16 +90,16 @@ app.post("/api/users", async function (req, res) {
     user.addRole(role);
 
     // Check user name is not already taken
-    var localUser = await findUserByUsername(user.username).then(() => {
-      if (localUser != null) {
-        res.status(400).json({ error: "Username taken" });
-      }
-    });
+    var localUser = await findUserByUsername(user.username);
+    if (localUser != null) {
+      res.status(400).json({ error: "Username taken" });
+      console.log("Username taken");
+      return;
+    }
 
     // Create new user
-    var newUser = await createUser(user).then(() => {
-      res.status(201).json(newUser);
-    });
+    var newUser = await createUser(user);
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: "User creation failed" });
   }

@@ -5,6 +5,7 @@ import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { Subject, takeUntil } from 'rxjs';
 import { RefreshService } from '../Services/Refresh/refresh.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-channels',
@@ -16,6 +17,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   channels: Array<Channel> = [];
   trash = faTrashAlt;
   sessionGroup: string;
+  sessionUserRole: number;
 
   constructor(
     private apiService: ApiService,
@@ -37,6 +39,10 @@ export class ChannelsComponent implements OnInit, OnDestroy {
 
         this.session.setChannel('');
       });
+
+    this.session.role$.pipe(takeUntil(this.destroyed$)).subscribe((newRole) => {
+      this.sessionUserRole = newRole;
+    });
 
     this.refresh.channel$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.getGroupChannels();

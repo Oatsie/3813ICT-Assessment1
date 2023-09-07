@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { SessionService } from '../Services/Session/session.service';
 import { RefreshService } from '../Services/Refresh/refresh.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -17,11 +18,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   sessionGroup: string;
   sessionUser: User;
   destroyed$ = new Subject<boolean>();
+  sessionUserRole: number;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
-    private refresh: RefreshService
+    private refresh: RefreshService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -43,6 +46,10 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     this.session.user$.subscribe((newUser) => {
       this.sessionUser = newUser;
+    });
+
+    this.session.role$.pipe(takeUntil(this.destroyed$)).subscribe((newRole) => {
+      this.sessionUserRole = newRole;
     });
   }
 
@@ -107,6 +114,20 @@ export class UsersComponent implements OnInit, OnDestroy {
           console.error(error);
         }
       );
+  }
+
+  logout() {
+    this.session.setChannel('');
+    this.session.setGroup('');
+    this.session.setUser({
+      _id: '',
+      username: '',
+      password: '',
+      email: '',
+      groups: [],
+      roles: [],
+    });
+    this.router.navigate(['']);
   }
 
   ngOnDestroy(): void {
