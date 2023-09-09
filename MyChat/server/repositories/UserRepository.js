@@ -118,15 +118,7 @@ async function updateUser(user) {
       .collection("Users")
       .findOneAndUpdate(
         { _id: user._id },
-        { $set: { roles: user.roles, groups: user.groups } },
-        function (err, result) {
-          if (err) {
-            console.error("Error updating document:", err);
-          } else {
-            console.log("Document updated successfully");
-            console.log(result.modifiedCount + " document(s) updated");
-          }
-        }
+        { $set: { roles: user.roles, groups: user.groups } }
       );
 
     console.log(result.value);

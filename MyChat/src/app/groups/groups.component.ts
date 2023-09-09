@@ -58,15 +58,16 @@ export class GroupsComponent implements OnInit, OnDestroy {
     });
     document.getElementById(group)?.classList.add('highlight');
 
-    let currentGroup = this.groups.find((x) => x._id == group);
-    this.groupCreater = currentGroup?.creater == this.sessionUser._id;
+    this.sessionGroup = this.groups.find((x) => x._id == group)!;
+    this.groupCreater = this.sessionGroup?.creater == this.sessionUser._id;
   }
 
-  deleteGroup(groupId: string) {
-    this.apiService.deleteGroup(groupId).subscribe(
+  deleteGroup() {
+    this.apiService.deleteGroup(this.sessionGroup._id).subscribe(
       () => {
         let time = Date.now();
         this.refresh.refreshGroups(time);
+        this.session.setGroup('');
       },
       (error) => {
         console.error(error);

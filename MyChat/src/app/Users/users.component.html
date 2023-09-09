@@ -5,7 +5,7 @@
   </div>
   <ul *ngIf="sessionUserRole > 0 || superAdmin" class="user-list">
     <div class="user-role-heading">Super Admins</div>
-    <li *ngFor="let user of superAdmins">
+    <li *ngFor="let user of superAdmins" (click)="editUser(user)">
       <span>{{ user?.username }}</span>
     </li>
     <div class="user-role-heading">Group Admins</div>
@@ -13,7 +13,7 @@
       <span>{{ user?.username }}</span>
     </li>
     <div class="user-role-heading">Users</div>
-    <li *ngFor="let user of users">
+    <li *ngFor="let user of users" (click)="editUser(user)">
       <span>{{ user?.username }}</span>
     </li>
   </ul>
