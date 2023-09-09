@@ -5,6 +5,8 @@ import { SessionService } from '../Services/Session/session.service';
 import { RefreshService } from '../Services/Refresh/refresh.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { UserEditModalComponent } from '../user-edit-modal/user-edit-modal.component';
 
 @Component({
   selector: 'app-users',
@@ -19,12 +21,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   sessionUser: User;
   destroyed$ = new Subject<boolean>();
   sessionUserRole: number;
-
+  editUserModal: MdbModalRef<UserEditModalComponent>;
   constructor(
     private apiService: ApiService,
     private session: SessionService,
     private refresh: RefreshService,
-    private router: Router
+    private router: Router,
+    private modalService: MdbModalService
   ) {}
 
   ngOnInit() {
@@ -97,6 +100,11 @@ export class UsersComponent implements OnInit, OnDestroy {
     );
   }
 
+  editUser(user: User) {
+    this.editUserModal.component.user = user;
+    this.editUserModal = this.modalService.open(UserEditModalComponent);
+  }
+
   createUser(
     username: string,
     password: string,
@@ -114,6 +122,41 @@ export class UsersComponent implements OnInit, OnDestroy {
           console.error(error);
         }
       );
+  }
+
+  changeUserRole(user: User, role: string): void {
+    let index = user.roles?.findIndex((x) => x.groupId == this.sessionGroup);
+
+    user.roles!.at(index!)!.name = role;
+
+    this.apiService.updateUser(user).subscribe(
+      () => {
+        let time = Date.now();
+        this.refresh.refreshUsers(time);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  removeGroup(user: User) {
+    let roleIndex = user.roles?.findIndex(
+      (x) => x.groupId == this.sessionGroup
+    );
+    let groupIndex = user.groups?.findIndex((x) => x == this.sessionGroup);
+    user.roles?.splice(roleIndex!);
+    user.groups?.splice(groupIndex!);
+
+    this.apiService.updateUser(user).subscribe(
+      () => {
+        let time = Date.now();
+        this.refresh.refreshUsers(time);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   logout() {

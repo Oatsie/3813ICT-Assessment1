@@ -1,28 +1,21 @@
-/* Container for the message view area */
 .message-container {
-  background-color: #2f3136;
+  background-color: #262626;
   color: #fff;
   padding: 10px;
-  overflow-y: scroll; /* Add a scrollbar when content overflows */
-  height: 95vh; /* Set a maximum height for the message area */
+  overflow-y: scroll;
+  height: 95vh;
   width: 100%;
 }
 
-/* Individual message */
+.current-user {
+  float: right;
+}
+
 .message {
   display: flex;
   margin-bottom: 10px;
 }
 
-/* User avatar in messages */
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* Message content */
 .message-content {
   flex-grow: 1;
 }
@@ -31,23 +24,22 @@
   list-style: none;
 }
 
-/* Message username */
 .message-username {
   font-weight: bold;
+  font-size: 16px;
+  color: rgb(146, 47, 185);
 }
 
-/* Message timestamp */
 .message-timestamp {
+  margin-left: 10px;
   font-size: 12px;
   color: #72767d;
 }
 
-/* Message text */
 .message-text {
   margin-top: 5px;
 }
 
-/* Hover effect for messages */
 .message li:hover {
   background-color: #40444b;
 }

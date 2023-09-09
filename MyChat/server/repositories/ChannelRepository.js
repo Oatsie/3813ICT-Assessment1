@@ -113,15 +113,10 @@ async function deleteChannel(id) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Deleting channel: " + id);
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
-      .findOne({ _id: id })
-      .toArray();
-
-    return channels;
+    await db.collection("Channels").deleteOne({ _id: id });
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;

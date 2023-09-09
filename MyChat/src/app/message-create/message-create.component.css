@@ -1,5 +1,5 @@
 .message-container {
-  background-color: #707172;
+  background-color: #353535;
   color: #fff;
   padding: 10px;
   height: 5vh;
@@ -10,4 +10,6 @@
   width: 80%;
   height: 50%;
   overflow-y: scroll;
+  background-color: #646464;
+  color: white;
 }

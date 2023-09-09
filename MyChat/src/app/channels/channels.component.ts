@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Channel } from '../models/channel';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { Subject, takeUntil } from 'rxjs';
 import { RefreshService } from '../Services/Refresh/refresh.service';
-import { User } from '../models/user';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ChannelCreateModalComponent } from '../channel-create-modal/channel-create-modal.component';
 
 @Component({
   selector: 'app-channels',
@@ -15,14 +15,16 @@ import { User } from '../models/user';
 export class ChannelsComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<boolean>();
   channels: Array<Channel> = [];
-  trash = faTrashAlt;
   sessionGroup: string;
   sessionUserRole: number;
+  sessionChannel: string;
+  createChannelModal: MdbModalRef<ChannelCreateModalComponent>;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
-    private refresh: RefreshService
+    private refresh: RefreshService,
+    private modalService: MdbModalService
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,12 @@ export class ChannelsComponent implements OnInit, OnDestroy {
       this.sessionUserRole = newRole;
     });
 
+    this.session.channel$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((newChannel) => {
+        this.sessionChannel = newChannel;
+      });
+
     this.refresh.channel$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.getGroupChannels();
     });
@@ -51,10 +59,23 @@ export class ChannelsComponent implements OnInit, OnDestroy {
 
   setChannel(channel: string) {
     this.session.setChannel(channel);
+
+    document.querySelectorAll('.channel-item')?.forEach((element) => {
+      element.classList.remove('highlight');
+    });
+    document.getElementById(channel)?.classList.add('highlight');
   }
 
-  deleteChannel(channelId: string) {
-    this.apiService.deleteChannel(channelId);
+  deleteChannel() {
+    this.apiService.deleteChannel(this.sessionChannel).subscribe(
+      () => {
+        let time = Date.now();
+        this.refresh.refreshChannels(time);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   getGroupChannels(): void {
@@ -74,17 +95,9 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     );
   }
 
-  createChannel(name: string): void {
-    if (this.sessionGroup == '' || this.sessionGroup == undefined) return;
-
-    this.apiService.createChannel(name, this.sessionGroup).subscribe(
-      () => {
-        let time = Date.now();
-        this.refresh.refreshChannels(time);
-      },
-      (error) => {
-        console.error(error);
-      }
+  createChannel(): void {
+    this.createChannelModal = this.modalService.open(
+      ChannelCreateModalComponent
     );
   }
 

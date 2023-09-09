@@ -10,9 +10,19 @@ import { MessageCreateModule } from './message-create/message-create.module';
 import { LoginModule } from './login/login.module';
 import { MainComponent } from './main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GroupCreateModalComponent } from './group-create-modal/group-create-modal.component';
+import { ChannelCreateModalComponent } from './channel-create-modal/channel-create-modal.component';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { UserEditModalComponent } from './user-edit-modal/user-edit-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, MainComponent],
+  declarations: [
+    AppComponent,
+    MainComponent,
+    GroupCreateModalComponent,
+    ChannelCreateModalComponent,
+    UserEditModalComponent,
+  ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
@@ -24,7 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [MdbModalService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

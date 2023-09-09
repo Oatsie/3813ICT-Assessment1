@@ -57,6 +57,14 @@ export class MessageViewComponent implements OnInit, OnDestroy {
         console.error(error);
       }
     );
+
+    document.querySelectorAll('.message-list')?.forEach((element) => {
+      let messageId = (element as HTMLElement).getAttribute('id');
+      let message = this.messages.find((x) => x.id == messageId);
+      if (message?.userId == this.sessionUser._id) {
+        element.classList.add('current-user');
+      }
+    });
   }
   ngOnDestroy(): void {
     this.destroyed$.next(true);

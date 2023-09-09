@@ -2,14 +2,12 @@
   <ul *ngIf="sessionUserRole > 0" class="channel-list">
     <div class="channel-role-heading">Channels</div>
     <li
+      [attr.id]="channel._id"
       *ngFor="let channel of channels"
       class="channel-item"
       (click)="setChannel(channel._id)"
     >
       <span>{{ channel?.name }}</span>
-      <button class="delete-icon" (click)="deleteChannel(channel._id)">
-        <fa-icon [icon]="trash" class="delete-icon"></fa-icon>
-      </button>
     </li>
   </ul>
 
@@ -17,6 +15,9 @@
     Request to Join Group
   </button>
   <div *ngIf="sessionUserRole > 1">
-    <button (click)="createChannel('Hogwarts')">Create Channel</button>
+    <button (click)="deleteChannel()">Delete Channel</button>
+  </div>
+  <div *ngIf="sessionUserRole > 1">
+    <button (click)="createChannel()">Create Channel</button>
   </div>
 </div>

@@ -2,7 +2,11 @@
   <div class="message">
     <div class="message-content">
       <ul>
-        <li *ngFor="let message of messages">
+        <li
+          class="message-list"
+          [attr.id]="message._id"
+          *ngFor="let message of messages"
+        >
           <span class="message-username">{{ message.username }}</span>
           <span class="message-timestamp">{{
             message.time | date : "short"

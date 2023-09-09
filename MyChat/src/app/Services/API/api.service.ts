@@ -39,9 +39,10 @@ export class ApiService {
     return this.http.get<Array<Group>>(`${this.apiUrl}/api/groups/`);
   }
 
-  createGroup(name: string): Observable<any> {
+  createGroup(name: string, creater: string): Observable<any> {
     var body = {
       name: name,
+      creater: creater,
     };
     return this.http.post(`${this.apiUrl}/api/groups`, body);
   }
@@ -102,5 +103,17 @@ export class ApiService {
       role: role,
     };
     return this.http.post(`${this.apiUrl}/api/users`, body);
+  }
+
+  updateUser(user: User): Observable<any> {
+    var body = {
+      id: user._id,
+      username: user.username,
+      password: user.password,
+      email: user.email,
+      groups: user.groups,
+      roles: user.roles,
+    };
+    return this.http.post(`${this.apiUrl}/api/users/update`, body);
   }
 }

@@ -22,6 +22,7 @@ const roleModel = require("./entities/Role");
 const channelModel = require("./entities/Channel");
 const messageModel = require("./entities/Message");
 const {
+  deleteChannel,
   createChannel,
   getAllChannels,
   getChannelsByGroupId,
@@ -35,6 +36,7 @@ const {
   createUser,
   getUsersByGroupId,
   findUserByUsername,
+  updateUser,
 } = require("./repositories/UserRepository");
 const {
   getAllGroups,
@@ -119,6 +121,28 @@ app.get("/api/groups/:groupId/users", async function (req, res) {
   res.send(users);
 });
 
+// Update user
+app.post("/api/users/update", async function (req, res) {
+  try {
+    const userData = req.body;
+
+    var user = new userModel.User(
+      userData.username,
+      userData.password,
+      userData.email
+    );
+
+    user._id = userData._id;
+    user.groups = userData.groups;
+    user.roles = userData.roles;
+
+    var result = await updateUser(user);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "User update failed" });
+  }
+});
+
 /** GROUP ENDPOINTS */
 // Gets all groups
 app.get("/api/groups", async function (req, res) {
@@ -131,7 +155,7 @@ app.post("/api/groups", async function (req, res) {
   try {
     const groupData = req.body;
 
-    var group = new groupModel.Group(groupData.name);
+    var group = new groupModel.Group(groupData.name, groupData.creater);
 
     // Create new group
     var newGroup = await createGroup(group).then(() => {

@@ -112,12 +112,10 @@ async function updateUser(user) {
     await client.connect();
     console.log("Attempting to update user: " + user._id);
 
-    var localUser = findUserByUsername(user.username);
-
-    if (localUser != null) return Error("Username is already taken");
-
     const db = client.db(dbName);
-    await db.collection("Users").updateOne({ _id: id }, user);
+
+    await db.collection("Users").updateOne({ _id: user._id }, user);
+
     console.log("User updated");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
