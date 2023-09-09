@@ -19,6 +19,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   superAdmins: Array<User> = [];
   sessionGroup: string;
   sessionUser: User;
+  superAdmin: boolean;
   destroyed$ = new Subject<boolean>();
   sessionUserRole: number;
   editUserModal: MdbModalRef<UserEditModalComponent>;
@@ -54,6 +55,9 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.session.role$.pipe(takeUntil(this.destroyed$)).subscribe((newRole) => {
       this.sessionUserRole = newRole;
     });
+
+    this.superAdmin =
+      this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
   }
 
   getGroupUsers(): void {
@@ -101,8 +105,12 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   editUser(user: User) {
-    this.editUserModal.component.user = user;
-    this.editUserModal = this.modalService.open(UserEditModalComponent);
+    this.editUserModal = this.modalService.open(UserEditModalComponent, {
+      data: {
+        user: user,
+        sessionGroup: this.sessionGroup,
+      },
+    });
   }
 
   createUser(
@@ -122,41 +130,6 @@ export class UsersComponent implements OnInit, OnDestroy {
           console.error(error);
         }
       );
-  }
-
-  changeUserRole(user: User, role: string): void {
-    let index = user.roles?.findIndex((x) => x.groupId == this.sessionGroup);
-
-    user.roles!.at(index!)!.name = role;
-
-    this.apiService.updateUser(user).subscribe(
-      () => {
-        let time = Date.now();
-        this.refresh.refreshUsers(time);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-  removeGroup(user: User) {
-    let roleIndex = user.roles?.findIndex(
-      (x) => x.groupId == this.sessionGroup
-    );
-    let groupIndex = user.groups?.findIndex((x) => x == this.sessionGroup);
-    user.roles?.splice(roleIndex!);
-    user.groups?.splice(groupIndex!);
-
-    this.apiService.updateUser(user).subscribe(
-      () => {
-        let time = Date.now();
-        this.refresh.refreshUsers(time);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
   }
 
   logout() {

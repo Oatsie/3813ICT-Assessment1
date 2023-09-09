@@ -111,12 +111,27 @@ async function updateUser(user) {
   try {
     await client.connect();
     console.log("Attempting to update user: " + user._id);
-
+    console.log(user);
     const db = client.db(dbName);
 
-    await db.collection("Users").updateOne({ _id: user._id }, user);
+    var result = await db
+      .collection("Users")
+      .findOneAndUpdate(
+        { _id: user._id },
+        { $set: { roles: user.roles, groups: user.groups } },
+        function (err, result) {
+          if (err) {
+            console.error("Error updating document:", err);
+          } else {
+            console.log("Document updated successfully");
+            console.log(result.modifiedCount + " document(s) updated");
+          }
+        }
+      );
 
-    console.log("User updated");
+    console.log(result.value);
+
+    //console.log("User updated");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;

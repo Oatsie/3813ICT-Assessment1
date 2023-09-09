@@ -1,1 +1,78 @@
-<h1>{{ user.username }}</h1>
+<div class="modal-header">
+  <h5 class="modal-title" id="username-label">{{ user.username }}</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<h5>Set Group Role</h5>
+<form>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="roleRadio"
+      (click)="userRoleSelected()"
+      id="user-btn"
+      value="User"
+    />
+    <label class="form-check-label" for="user-btn"> User </label>
+  </div>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="roleRadio"
+      (click)="groupRoleSelected()"
+      id="group-btn"
+      value="Group Admin"
+    />
+    <label class="form-check-label" for="group-btn"> Group Admin </label>
+  </div>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="roleRadio"
+      (click)="superRoleSelected()"
+      id="super-bttn"
+      value="Super Admin"
+    />
+    <label class="form-check-label" for="super-bttn"> Super Admin </label>
+  </div>
+</form>
+<h5>Remove From Group</h5>
+<form>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="removeRadio"
+      (click)="yesSelected()"
+      id="yes-btn"
+      value="true"
+    />
+    <label class="form-check-label" for="yes-btn"> Yes </label>
+  </div>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="removeRadio"
+      (click)="noSelected()"
+      id="no-btn"
+      value="false"
+    />
+    <label class="form-check-label" for="no-btn"> No </label>
+  </div>
+</form>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="close()">
+    Close
+  </button>
+  <button type="button" class="btn btn-primary" (click)="editUser()">
+    Submit
+  </button>
+</div>

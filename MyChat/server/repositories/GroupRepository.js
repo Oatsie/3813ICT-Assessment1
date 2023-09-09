@@ -52,27 +52,9 @@ async function createGroup(group) {
     var result = await db.collection("Groups").insertOne(group);
 
     console.log("Inserted group document with ID:", result.insertedId);
+    return result.insertedId;
   } catch (err) {
     console.error("Error:", err);
-    throw err;
-  } finally {
-    client.close();
-  }
-}
-
-async function updateGroup(group) {
-  const client = new MongoClient(url);
-
-  try {
-    await client.connect();
-    console.log("Updating group: " + group._id);
-
-    const db = client.db(dbName);
-    var groups = await db.collection("Groups").findOne({ _id: id }).toArray();
-
-    return groups;
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
     throw err;
   } finally {
     client.close();
@@ -87,9 +69,7 @@ async function deleteGroup(id) {
     console.log("Deleting group: " + id);
 
     const db = client.db(dbName);
-    var groups = await db.collection("Groups").findOne({ _id: id }).toArray();
-
-    return groups;
+    await db.collection("Groups").deleteOne({ _id: id });
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -101,5 +81,4 @@ async function deleteGroup(id) {
 module.exports.getAllGroups = getAllGroups;
 module.exports.createGroup = createGroup;
 module.exports.getGroupById = getGroupById;
-module.exports.updateGroup = updateGroup;
 module.exports.deleteGroup = deleteGroup;

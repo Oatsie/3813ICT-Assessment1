@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { RefreshService } from '../Services/Refresh/refresh.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ChannelCreateModalComponent } from '../channel-create-modal/channel-create-modal.component';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-channels',
@@ -18,6 +19,8 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   sessionGroup: string;
   sessionUserRole: number;
   sessionChannel: string;
+  superAdmin: boolean;
+  sessionUser: User;
   createChannelModal: MdbModalRef<ChannelCreateModalComponent>;
 
   constructor(
@@ -46,6 +49,10 @@ export class ChannelsComponent implements OnInit, OnDestroy {
       this.sessionUserRole = newRole;
     });
 
+    this.session.user$.pipe(takeUntil(this.destroyed$)).subscribe((newUser) => {
+      this.sessionUser = newUser;
+    });
+
     this.session.channel$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((newChannel) => {
@@ -55,6 +62,9 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     this.refresh.channel$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.getGroupChannels();
     });
+
+    this.superAdmin =
+      this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
   }
 
   setChannel(channel: string) {
@@ -71,6 +81,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
       () => {
         let time = Date.now();
         this.refresh.refreshChannels(time);
+        this.session.setChannel('');
       },
       (error) => {
         console.error(error);

@@ -38,7 +38,19 @@ export class GroupCreateModalComponent implements OnInit, OnDestroy {
     this.apiService
       .createGroup(groupname.value, this.sessionUser._id!)
       .subscribe(
-        () => {
+        (res) => {
+          console.log(res);
+          let user = this.sessionUser;
+          user.groups?.push(res);
+          user.roles?.push({ groupId: res, name: 'Group Admin' });
+
+          this.apiService.updateUser(user).subscribe(
+            () => {},
+            (error) => {
+              console.error(error);
+            }
+          );
+
           let time = Date.now();
           this.refresh.refreshGroups(time);
           this.modalRef.close();

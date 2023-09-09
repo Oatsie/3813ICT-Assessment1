@@ -59,7 +59,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     document.getElementById(group)?.classList.add('highlight');
 
     let currentGroup = this.groups.find((x) => x._id == group);
-    this.groupCreater = currentGroup?.creater == this.sessionUser;
+    this.groupCreater = currentGroup?.creater == this.sessionUser._id;
   }
 
   deleteGroup(groupId: string) {

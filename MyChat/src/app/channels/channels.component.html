@@ -1,5 +1,5 @@
 <div class="channel-list">
-  <ul *ngIf="sessionUserRole > 0" class="channel-list">
+  <ul *ngIf="sessionUserRole > 0 || superAdmin" class="channel-list">
     <div class="channel-role-heading">Channels</div>
     <li
       [attr.id]="channel._id"

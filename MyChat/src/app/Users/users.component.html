@@ -3,7 +3,7 @@
     <h4>{{ sessionUser.username }}</h4>
     <button (click)="logout()">Logout</button>
   </div>
-  <ul *ngIf="sessionUserRole > 0" class="user-list">
+  <ul *ngIf="sessionUserRole > 0 || superAdmin" class="user-list">
     <div class="user-role-heading">Super Admins</div>
     <li *ngFor="let user of superAdmins">
       <span>{{ user?.username }}</span>

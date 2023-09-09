@@ -42,7 +42,6 @@ const {
   getAllGroups,
   getGroupById,
   createGroup,
-  updateGroup,
   deleteGroup,
 } = require("./repositories/GroupRepository");
 
@@ -132,7 +131,7 @@ app.post("/api/users/update", async function (req, res) {
       userData.email
     );
 
-    user._id = userData._id;
+    user._id = userData.id;
     user.groups = userData.groups;
     user.roles = userData.roles;
 
@@ -158,9 +157,8 @@ app.post("/api/groups", async function (req, res) {
     var group = new groupModel.Group(groupData.name, groupData.creater);
 
     // Create new group
-    var newGroup = await createGroup(group).then(() => {
-      res.status(201).json(newGroup);
-    });
+    var newGroup = await createGroup(group);
+    res.status(201).json(newGroup);
   } catch (error) {
     res.status(500).json({ error: "Group creation failed" });
   }
