@@ -1,50 +1,15 @@
-/* Container for the message view area */
 .message-container {
-  background-color: #707172;
+  background-color: #353535;
   color: #fff;
   padding: 10px;
-  border-radius: 5px;
-  overflow-y: scroll; /* Add a scrollbar when content overflows */
-  height: 10vh; /* Set a maximum height for the message area */
+  height: 5vh;
   width: 100%;
 }
 
-/* Individual message */
-.message {
-  display: flex;
-  margin-bottom: 10px;
-}
-
-/* User avatar in messages */
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* Message content */
-.message-content {
-  flex-grow: 1; /* Take up all available space in the message */
-}
-
-/* Message username */
-.message-username {
-  font-weight: bold;
-}
-
-/* Message timestamp */
-.message-timestamp {
-  font-size: 12px;
-  color: #72767d;
-}
-
-/* Message text */
-.message-text {
-  margin-top: 5px;
-}
-
-/* Hover effect for messages */
-.message:hover {
-  background-color: #40444b;
+.message-input {
+  width: 80%;
+  height: 50%;
+  overflow-y: scroll;
+  background-color: #646464;
+  color: white;
 }

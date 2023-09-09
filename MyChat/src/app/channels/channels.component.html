@@ -1,19 +1,23 @@
 <div class="channel-list">
-  <div class="channel-role-heading">Channels</div>
+  <ul *ngIf="sessionUserRole > 0 || superAdmin" class="channel-list">
+    <div class="channel-role-heading">Channels</div>
+    <li
+      [attr.id]="channel._id"
+      *ngFor="let channel of channels"
+      class="channel-item"
+      (click)="setChannel(channel._id)"
+    >
+      <span>{{ channel?.name }}</span>
+    </li>
+  </ul>
 
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 1</span>
+  <button *ngIf="sessionUserRole == 0 && sessionGroup != ''">
+    Request to Join Group
+  </button>
+  <div *ngIf="sessionUserRole > 1">
+    <button (click)="deleteChannel()">Delete Channel</button>
   </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 2</span>
-  </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 3</span>
-  </div>
-
-  <div class="channel-item">
-    <span class="channel-channelname">Channel 4</span>
+  <div *ngIf="sessionUserRole > 1">
+    <button (click)="createChannel()">Create Channel</button>
   </div>
 </div>

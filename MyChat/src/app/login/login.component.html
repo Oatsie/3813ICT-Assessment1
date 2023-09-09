@@ -1,0 +1,36 @@
+<div class="login-container">
+  <div class="login-box">
+    <h1 *ngIf="!registerUser">Welcome Back!</h1>
+    <h1 *ngIf="registerUser">Register</h1>
+    <h2 *ngIf="loginFail" class="login-failed">
+      Username or password is incorrect
+    </h2>
+    <div *ngIf="!registerUser">
+      <form [formGroup]="registrationForm">
+        <input formControlName="username" type="text" placeholder="Username" />
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+        />
+      </form>
+    </div>
+    <div *ngIf="registerUser">
+      <h2 *ngIf="registerFail" class="login-failed">
+        Username is already taken
+      </h2>
+      <form [formGroup]="registrationForm">
+        <input formControlName="username" type="text" placeholder="Username" />
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+        />
+        <input formControlName="email" type="Email" placeholder="Email" />
+      </form>
+    </div>
+    <button *ngIf="!registerUser" (click)="login()">Login</button>
+    <button *ngIf="registerUser" (click)="ToggleLogin()">Back</button>
+    <button (click)="ToggleRegister()">Register</button>
+  </div>
+</div>

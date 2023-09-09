@@ -34,6 +34,8 @@ async function getUsersByGroupId(groupId) {
       .find({ groups: { $elemMatch: { $eq: groupId } } })
       .toArray();
 
+    console.log(users.length + " users found!");
+
     return users;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
@@ -71,7 +73,7 @@ async function findUserByUsername(username) {
 
     const db = client.db(dbName);
     var user = await db.collection("Users").findOne({ username: username });
-
+    console.log(user);
     return user;
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
@@ -109,14 +111,19 @@ async function updateUser(user) {
   try {
     await client.connect();
     console.log("Attempting to update user: " + user._id);
-
-    var localUser = findUserByUsername(user.username);
-
-    if (localUser != null) return Error("Username is already taken");
-
+    console.log(user);
     const db = client.db(dbName);
-    await db.collection("Users").updateOne({ _id: id }, user);
-    console.log("User updated");
+
+    var result = await db
+      .collection("Users")
+      .findOneAndUpdate(
+        { _id: user._id },
+        { $set: { roles: user.roles, groups: user.groups } }
+      );
+
+    console.log(result.value);
+
+    //console.log("User updated");
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
