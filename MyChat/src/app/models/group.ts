@@ -1,13 +1,5 @@
-export class Group {
-  id: string;
+export interface Group {
+  _id: string;
   name: string;
-  users: string[];
-  channels: string[];
-
-  constructor(id: string, name: string, users: string[], channels: string[]) {
-    this.id = id;
-    this.name = name;
-    this.users = users;
-    this.channels = channels;
-  }
+  creater: string;
 }

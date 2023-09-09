@@ -1,19 +1,19 @@
 <div class="group-list">
-  <div class="group-role-heading">Groups</div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 1</span>
+  <ul class="group-list">
+    <div class="group-role-heading">Groups</div>
+    <li
+      [attr.id]="group._id"
+      *ngFor="let group of groups"
+      class="group-item"
+      (click)="setGroup(group._id)"
+    >
+      <span>{{ group?.name }}</span>
+    </li>
+  </ul>
+  <div *ngIf="groupCreater">
+    <button (click)="deleteGroup()">Delete Group</button>
   </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 2</span>
-  </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 3</span>
-  </div>
-
-  <div class="group-item">
-    <span class="group-groupname">Group 4</span>
+  <div *ngIf="sessionUserRole > 1 || superAdmin">
+    <button (click)="createGroup()">Create Group</button>
   </div>
 </div>

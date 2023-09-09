@@ -1,36 +1,40 @@
 .group-list {
-  background-color: #36393f;
+  background-color: #13001c;
   color: #fff;
   padding: 10px;
-  border-radius: 5px;
-  float: left;
+  float: right;
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100%;
 }
 
-/* Group role heading */
 .group-role-heading {
   font-weight: bold;
   margin-bottom: 5px;
-  color: #43b581; /* You can adjust the color to your preference */
+  color: #43b581;
 }
 
-/* Individual group item */
-.group-item {
+.highlight {
+  background-color: rgb(146, 83, 0);
+}
+
+.group-list li {
   display: flex;
   align-items: center;
   padding: 8px;
+  font-weight: bold;
 }
 
-/* Groupname */
 .group-groupname {
   font-weight: bold;
 }
 
-/* Hover effect for group items */
-.group-item:hover {
+.group-list li:not(.highlight):hover {
   background-color: #40444b;
   cursor: pointer;
+}
+
+.group-item {
+  position: relative;
 }

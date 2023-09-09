@@ -21,6 +21,30 @@ async function getAllChannels() {
   }
 }
 
+async function getChannelsByGroupId(groupId) {
+  const client = new MongoClient(url);
+
+  try {
+    await client.connect();
+    console.log("Fetching channels of group: " + groupId);
+
+    const db = client.db(dbName);
+    var channels = await db
+      .collection("Channels")
+      .find({ groupId: groupId })
+      .toArray();
+
+    console.log(channels.length + " channels found!");
+
+    return channels;
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+    throw err;
+  } finally {
+    client.close();
+  }
+}
+
 async function getChannelById(id) {
   const client = new MongoClient(url);
 
@@ -89,15 +113,10 @@ async function deleteChannel(id) {
 
   try {
     await client.connect();
-    console.log("Connected successfully to server!");
+    console.log("Deleting channel: " + id);
 
     const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
-      .findOne({ _id: id })
-      .toArray();
-
-    return channels;
+    await db.collection("Channels").deleteOne({ _id: id });
   } catch (err) {
     console.error("Error connecting to MongoDB:", err);
     throw err;
@@ -111,3 +130,4 @@ module.exports.createChannel = createChannel;
 module.exports.getChannelById = getChannelById;
 module.exports.updateChannel = updateChannel;
 module.exports.deleteChannel = deleteChannel;
+module.exports.getChannelsByGroupId = getChannelsByGroupId;

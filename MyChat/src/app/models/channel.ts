@@ -1,11 +1,5 @@
-export class Channel {
-  id: string;
+export interface Channel {
+  _id: string;
   name: string;
   messages: string[];
-
-  constructor(id: string, name: string, messages: string[]) {
-    this.id = id;
-    this.name = name;
-    this.messages = messages;
-  }
 }
