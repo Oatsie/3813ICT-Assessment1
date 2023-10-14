@@ -15,6 +15,17 @@ app.use(express.static(path.join(__dirname, "../dist/my-chat/")));
 
 const http = require("http").Server(app);
 
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST"],
+  },
+});
+
+const sockets = require("./socket.js");
+
+sockets.connect(io, 3000);
+
 // repo imports
 const userModel = require("./entities/User");
 const groupModel = require("./entities/Group");

@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { UserEditModalComponent } from '../user-edit-modal/user-edit-modal.component';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-users',
@@ -23,12 +24,15 @@ export class UsersComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<boolean>();
   sessionUserRole: number;
   editUserModal: MdbModalRef<UserEditModalComponent>;
+  ioConnection: any;
+
   constructor(
     private apiService: ApiService,
     private session: SessionService,
     private refresh: RefreshService,
     private router: Router,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -58,6 +62,19 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     this.superAdmin =
       this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
+
+    this.innitIoConection();
+  }
+
+  private innitIoConection() {
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService
+      .getMessage()
+      .subscribe((message: string) => {
+        if (message == 'editUser:' + this.sessionGroup) {
+          this.getGroupUsers();
+        }
+      });
   }
 
   getGroupUsers(): void {

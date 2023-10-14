@@ -7,6 +7,7 @@ import { RefreshService } from '../Services/Refresh/refresh.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ChannelCreateModalComponent } from '../channel-create-modal/channel-create-modal.component';
 import { User } from '../models/user';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-channels',
@@ -22,12 +23,14 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   superAdmin: boolean;
   sessionUser: User;
   createChannelModal: MdbModalRef<ChannelCreateModalComponent>;
+  ioConnection: any;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
     private refresh: RefreshService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -65,6 +68,22 @@ export class ChannelsComponent implements OnInit, OnDestroy {
 
     this.superAdmin =
       this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
+
+    this.innitIoConection();
+  }
+
+  private innitIoConection() {
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService
+      .getMessage()
+      .subscribe((message: string) => {
+        if (
+          message == 'newChannel:' + this.sessionGroup ||
+          message == 'deleteChannel:' + this.sessionGroup
+        ) {
+          this.getGroupChannels();
+        }
+      });
   }
 
   setChannel(channel: string) {
@@ -79,8 +98,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   deleteChannel() {
     this.apiService.deleteChannel(this.sessionChannel).subscribe(
       () => {
-        let time = Date.now();
-        this.refresh.refreshChannels(time);
+        this.socketService.send('deleteChannel:' + this.sessionGroup);
         this.session.setChannel('');
       },
       (error) => {

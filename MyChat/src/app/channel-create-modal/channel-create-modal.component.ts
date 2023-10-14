@@ -4,6 +4,7 @@ import { ApiService } from '../Services/API/api.service';
 import { RefreshService } from '../Services/Refresh/refresh.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SessionService } from '../Services/Session/session.service';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-channel-create-modal',
@@ -17,7 +18,8 @@ export class ChannelCreateModalComponent implements OnInit, OnDestroy {
     public modalRef: MdbModalRef<ChannelCreateModalComponent>,
     private apiService: ApiService,
     private refresh: RefreshService,
-    private session: SessionService
+    private session: SessionService,
+    private socketServive: SocketService
   ) {}
   ngOnInit() {
     this.session.group$.pipe(takeUntil(this.destroyed$)).subscribe((group) => {
@@ -37,8 +39,7 @@ export class ChannelCreateModalComponent implements OnInit, OnDestroy {
       .createChannel(channelName.value, this.sessionGroup)
       .subscribe(
         () => {
-          let time = Date.now();
-          this.refresh.refreshChannels(time);
+          this.socketServive.send('newChannel:' + this.sessionGroup);
           this.modalRef.close();
         },
         (error) => {

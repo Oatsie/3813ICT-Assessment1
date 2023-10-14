@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 import { User } from '../models/user';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { ApiService } from '../Services/API/api.service';
-import { RefreshService } from '../Services/Refresh/refresh.service';
-import { CommonModule } from '@angular/common';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-user-edit-modal',
@@ -19,7 +18,7 @@ export class UserEditModalComponent {
   constructor(
     public modalRef: MdbModalRef<UserEditModalComponent>,
     private apiService: ApiService,
-    private refresh: RefreshService
+    private socketService: SocketService
   ) {}
 
   close() {
@@ -59,8 +58,7 @@ export class UserEditModalComponent {
 
       this.apiService.updateUser(this.user).subscribe(
         () => {
-          let time = Date.now();
-          this.refresh.refreshUsers(time);
+          this.socketService.send('editUser:' + this.sessionGroup);
         },
         (error) => {
           console.error(error);
@@ -78,8 +76,7 @@ export class UserEditModalComponent {
 
     this.apiService.updateUser(this.user).subscribe(
       () => {
-        let time = Date.now();
-        this.refresh.refreshUsers(time);
+        this.socketService.send('editUser:' + this.sessionGroup);
       },
       (error) => {
         console.error(error);

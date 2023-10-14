@@ -3,8 +3,9 @@ import { Message } from '../models/message';
 import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { User } from '../models/user';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { RefreshService } from '../Services/Refresh/refresh.service';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-message-view',
@@ -16,11 +17,12 @@ export class MessageViewComponent implements OnInit, OnDestroy {
   messages: Array<Message> = [];
   sessionChannel: string;
   sessionUser: User;
+  ioConnection: any;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
-    private refresh: RefreshService
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -36,9 +38,18 @@ export class MessageViewComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.refresh.message$.subscribe(() => {
-      this.getChannelMessages();
-    });
+    this.innitIoConection();
+  }
+
+  private innitIoConection() {
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService
+      .getMessage()
+      .subscribe((message: string) => {
+        if (message == 'newMessage:' + this.sessionChannel) {
+          this.getChannelMessages();
+        }
+      });
   }
 
   getChannelMessages(): void {
