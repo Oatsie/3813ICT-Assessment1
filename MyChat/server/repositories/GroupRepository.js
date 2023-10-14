@@ -2,6 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://127.0.0.1:27017";
 const dbName = "MyChat";
 
+// Returns all groups from the database
 async function getAllGroups() {
   const client = new MongoClient(url);
 
@@ -22,25 +23,7 @@ async function getAllGroups() {
   }
 }
 
-async function getGroupById(id) {
-  const client = new MongoClient(url);
-
-  try {
-    await client.connect();
-    console.log("Attempting to get group: " + id);
-
-    const db = client.db(dbName);
-    var groups = await db.collection("Groups").findOne({ _id: id }).toArray();
-
-    return groups;
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-    throw err;
-  } finally {
-    client.close();
-  }
-}
-
+// Creates a new group in the database
 async function createGroup(group) {
   const client = new MongoClient(url);
 
@@ -61,6 +44,7 @@ async function createGroup(group) {
   }
 }
 
+// Deletes a group from the database
 async function deleteGroup(id) {
   const client = new MongoClient(url);
 
@@ -80,5 +64,4 @@ async function deleteGroup(id) {
 
 module.exports.getAllGroups = getAllGroups;
 module.exports.createGroup = createGroup;
-module.exports.getGroupById = getGroupById;
 module.exports.deleteGroup = deleteGroup;

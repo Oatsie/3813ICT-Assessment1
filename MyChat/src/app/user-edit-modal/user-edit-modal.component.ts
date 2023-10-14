@@ -25,26 +25,32 @@ export class UserEditModalComponent {
     this.modalRef.close();
   }
 
+  // Sets role to User
   userRoleSelected() {
     this.role = 'User';
   }
 
+  // Sets role to Group Admin
   groupRoleSelected() {
     this.role = 'Group Admin';
   }
 
+  // Sets role to Super Admin
   superRoleSelected() {
     this.role = 'Super Admin';
   }
 
+  // Sets user to be removed from group
   yesSelected() {
     this.removeGroup = true;
   }
 
+  // Sets user to not be removed from Group
   noSelected() {
     this.removeGroup = false;
   }
 
+  // Updates the user details
   editUser() {
     if (this.removeGroup) {
       let roleIndex = this.user.roles?.findIndex(

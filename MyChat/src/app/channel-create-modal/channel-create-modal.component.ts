@@ -30,6 +30,7 @@ export class ChannelCreateModalComponent implements OnInit, OnDestroy {
     this.modalRef.close();
   }
 
+  // Creates a new channel for the current group
   createChannel(): void {
     const channelName = document.getElementById(
       'channelNameInput'

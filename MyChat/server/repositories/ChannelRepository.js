@@ -2,25 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://127.0.0.1:27017";
 const dbName = "MyChat";
 
-async function getAllChannels() {
-  const client = new MongoClient(url);
-
-  try {
-    await client.connect();
-    console.log("Connected successfully to server!");
-
-    const db = client.db(dbName);
-    var channels = await db.collection("Channels").find().toArray();
-
-    return channels;
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-    throw err;
-  } finally {
-    client.close();
-  }
-}
-
+// Gets all channels from the database that have the provided groupId
 async function getChannelsByGroupId(groupId) {
   const client = new MongoClient(url);
 
@@ -45,28 +27,7 @@ async function getChannelsByGroupId(groupId) {
   }
 }
 
-async function getChannelById(id) {
-  const client = new MongoClient(url);
-
-  try {
-    await client.connect();
-    console.log("Connected successfully to server!");
-
-    const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
-      .findOne({ _id: id })
-      .toArray();
-
-    return channels;
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-    throw err;
-  } finally {
-    client.close();
-  }
-}
-
+// Creates a new channel in the database
 async function createChannel(channel) {
   const client = new MongoClient(url);
 
@@ -86,28 +47,7 @@ async function createChannel(channel) {
   }
 }
 
-async function updateChannel(channel) {
-  const client = new MongoClient(url);
-
-  try {
-    await client.connect();
-    console.log("Connected successfully to server!");
-
-    const db = client.db(dbName);
-    var channels = await db
-      .collection("Channels")
-      .findOne({ _id: id })
-      .toArray();
-
-    return channels;
-  } catch (err) {
-    console.error("Error connecting to MongoDB:", err);
-    throw err;
-  } finally {
-    client.close();
-  }
-}
-
+// Deletes a channel from the database
 async function deleteChannel(id) {
   const client = new MongoClient(url);
 
@@ -125,9 +65,6 @@ async function deleteChannel(id) {
   }
 }
 
-module.exports.getAllChannels = getAllChannels;
 module.exports.createChannel = createChannel;
-module.exports.getChannelById = getChannelById;
-module.exports.updateChannel = updateChannel;
 module.exports.deleteChannel = deleteChannel;
 module.exports.getChannelsByGroupId = getChannelsByGroupId;

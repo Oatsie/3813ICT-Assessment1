@@ -52,6 +52,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.innitIoConection();
   }
 
+  // Initialises the connection to the socket
   private innitIoConection() {
     this.socketService.initSocket();
     this.ioConnection = this.socketService
@@ -63,6 +64,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Sets the selected grup as the current group
   setGroup(group: string) {
     this.session.setGroup(group);
     document.querySelectorAll('.group-item')?.forEach((element) => {
@@ -74,6 +76,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.groupCreater = this.sessionGroup?.creater == this.sessionUser._id;
   }
 
+  // Deletes the current group
   deleteGroup() {
     this.apiService.deleteGroup(this.sessionGroup._id).subscribe(
       () => {
@@ -86,6 +89,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Gets a lit of groups
   getGroups(): void {
     this.apiService.getGroups().subscribe(
       (groups: Array<Group>) => {
@@ -98,6 +102,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Opens a modal for creating a new group
   createGroup(): void {
     this.createGroupModal = this.modalService.open(GroupCreateModalComponent);
   }

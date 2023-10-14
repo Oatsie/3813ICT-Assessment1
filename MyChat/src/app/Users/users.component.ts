@@ -66,6 +66,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.innitIoConection();
   }
 
+  // Initialises the connection to the socket
   private innitIoConection() {
     this.socketService.initSocket();
     this.ioConnection = this.socketService
@@ -77,6 +78,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Gets a list of users for a group
   getGroupUsers(): void {
     if (this.sessionGroup == '' || this.sessionGroup == undefined) {
       this.users = [];
@@ -121,6 +123,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Opens a modal to update the user details from
   editUser(user: User) {
     this.editUserModal = this.modalService.open(UserEditModalComponent, {
       data: {
@@ -130,6 +133,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Creates a new user
   createUser(
     username: string,
     password: string,
@@ -149,6 +153,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       );
   }
 
+  // Logs the current session user out
   logout() {
     this.session.setChannel('');
     this.session.setGroup('');

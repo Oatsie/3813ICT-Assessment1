@@ -72,6 +72,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     this.innitIoConection();
   }
 
+  // innitialises the connection to the socket
   private innitIoConection() {
     this.socketService.initSocket();
     this.ioConnection = this.socketService
@@ -86,6 +87,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Sets the current channel to the selceted channel
   setChannel(channel: string) {
     this.session.setChannel(channel);
 
@@ -95,6 +97,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     document.getElementById(channel)?.classList.add('highlight');
   }
 
+  // Deletes the current channel
   deleteChannel() {
     this.apiService.deleteChannel(this.sessionChannel).subscribe(
       () => {
@@ -107,6 +110,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Gets all channels of the current group
   getGroupChannels(): void {
     if (this.sessionGroup == '' || this.sessionGroup == undefined) {
       this.channels = [];
@@ -124,6 +128,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Opens a modal for creating a new channel
   createChannel(): void {
     this.createChannelModal = this.modalService.open(
       ChannelCreateModalComponent

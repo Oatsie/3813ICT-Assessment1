@@ -32,9 +32,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.populateForm();
   }
 
+  // Switches the register user to false
   ToggleLogin(): void {
     this.registerUser = false;
   }
+
+  // Registers a new user if toggle is already true, otherwise toggles to true
   ToggleRegister(): void {
     if (!this.registerUser) {
       this.registerUser = true;
@@ -56,6 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.registerFail = true;
   }
 
+  // Uses the username and password to login
   login() {
     const user = {
       username: this.registrationForm?.get('username')?.value,
@@ -74,6 +78,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.loginFail = true;
   }
+
+  // Cretes a new form
   createRegistrationForm(): void {
     this.registrationForm = this.fb.group({
       username: new UntypedFormControl({
@@ -88,6 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Populates the form
   populateForm(): void {
     this.registrationForm.patchValue({
       username: null,
@@ -100,14 +107,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Gets the username from the form
   get username() {
     return this.registrationForm?.get('username');
   }
 
+  // Gets the password from the form
   get password() {
     return this.registrationForm?.get('password');
   }
 
+  // Gets the email address from the form
   get email() {
     return this.registrationForm?.get('email');
   }

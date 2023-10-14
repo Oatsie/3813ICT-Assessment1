@@ -35,7 +35,6 @@ const messageModel = require("./entities/Message");
 const {
   deleteChannel,
   createChannel,
-  getAllChannels,
   getChannelsByGroupId,
 } = require("./repositories/ChannelRepository");
 const {
@@ -51,7 +50,6 @@ const {
 } = require("./repositories/UserRepository");
 const {
   getAllGroups,
-  getGroupById,
   createGroup,
   deleteGroup,
 } = require("./repositories/GroupRepository");

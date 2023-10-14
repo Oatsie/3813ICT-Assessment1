@@ -32,6 +32,7 @@ export class MessageCreateComponent {
     });
   }
 
+  // Creates a new message for the channel
   createMessage(): void {
     console.log(this.sessionUser);
     console.log(this.sessionChannel);

@@ -41,6 +41,7 @@ export class MessageViewComponent implements OnInit, OnDestroy {
     this.innitIoConection();
   }
 
+  // Initialises the connection to the socket
   private innitIoConection() {
     this.socketService.initSocket();
     this.ioConnection = this.socketService
@@ -52,6 +53,7 @@ export class MessageViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Gets a list of messages for the current channel
   getChannelMessages(): void {
     if (this.sessionChannel == undefined || this.sessionChannel == '') {
       this.messages = [];

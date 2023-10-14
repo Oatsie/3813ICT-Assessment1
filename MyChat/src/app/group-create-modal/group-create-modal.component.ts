@@ -32,6 +32,7 @@ export class GroupCreateModalComponent implements OnInit, OnDestroy {
     this.modalRef.close();
   }
 
+  // Creates a new group
   createGroup(): void {
     const groupname = document.getElementById(
       'groupNameInput'
