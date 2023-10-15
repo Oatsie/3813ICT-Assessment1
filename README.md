@@ -44,9 +44,35 @@ Object takes in a name and group id on creation <br>
 &emsp; groupId: string <br>
 
 ## Angular architecture
-For the angular components I had the login screen as a component, then I had a main component which was used to wrap the components the made up the main app UI. These were the groups, user, message view, and message create components.
-I also made a few modal components for creating or editing certain entities. 
-I created 3 differnet services. An API service, which was used for all the api calls, a session service, which kept track of all the current session entites, and a refresh service, which was used to update lists when data changed. 
+### Component - Users
+The users componenet displays the list of users within the selected group as well as what role they have in that group. It also contains the log out button for the user.
+### Component - Groups
+THe groups component displays the list of groups in the databse, and allows new groups to be added, or existing groups to be deleted. 
+### Component - Channels
+The Channels component displays a list of channels for the selected group. It also has a button to create a new channel for the group
+### Component - Messagage-View
+The message view component displays all the messages for a channel in a scrollable view. Each message diplays the user that sent it, what time it was sent, and the message content
+### Component - Message-Create
+The message create component has a text box for entering a new channel message, and a submit button to create the new messgae
+### Component - Login
+THe login component displays a login screen for users to either log in or register as a new user
+### Component - Channel-Create-Modal
+The channel crete modal is a modal that creates a new channel for a group with the name the user inputs
+### Component - Group-Create-Modal
+The group create modal creates a new group with the name the user inputs
+### Component - User-Edit-Modal
+The user edit modal allows an admin to adjust the role level a user has in the current group, or remove the user from the group. 
+### Component - Main
+The main component wraps the users, groups, channels, message view, and message create components to create a single screen display
+### Service - API
+The API service is used for handling all requests to the API and the reponses
+### Service - Refresh
+The refresh service was used for refreshing the lists when a new item was creted in that list, this has now been replaced by the socket service
+### Service - Session
+The session service keeps track of the currently selected group and channel, as well as the logged in user. Components are subscribed to the changes in this values to grab the data relavant to the updated value
+### Service - Socket
+The socket service is used for message communication with the server socket. Newly created items will generate a new message, and components with lists will listen to messages to know if thier list needs to be refreshed
+
 ## Node server architecture
 In the Node server I hade the main server file which stored all the API endpoints. These endpoints would utalise the different entity repositories. The entity repositories had various functions in them for CRUD (Create, Read, Update, Delete) database commands.
 The entities were represented by object classes
