@@ -4,6 +4,7 @@ import { ApiService } from '../Services/API/api.service';
 import { SessionService } from '../Services/Session/session.service';
 import { RefreshService } from '../Services/Refresh/refresh.service';
 import { Subject } from 'rxjs';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-message-create',
@@ -18,7 +19,7 @@ export class MessageCreateComponent {
   constructor(
     private apiService: ApiService,
     private session: SessionService,
-    private refresh: RefreshService
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -31,6 +32,7 @@ export class MessageCreateComponent {
     });
   }
 
+  // Creates a new message for the channel
   createMessage(): void {
     console.log(this.sessionUser);
     console.log(this.sessionChannel);
@@ -53,7 +55,7 @@ export class MessageCreateComponent {
       )
       .subscribe(
         () => {
-          this.refresh.refreshMessages(time);
+          this.socketService.send('newMessage:' + this.sessionChannel);
         },
         (error) => {
           console.error(error);

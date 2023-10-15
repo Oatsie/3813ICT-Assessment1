@@ -2,6 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://127.0.0.1:27017";
 const dbName = "MyChat";
 
+// Gets all users from the database
 async function getAllUsers() {
   const client = new MongoClient(url);
 
@@ -21,6 +22,7 @@ async function getAllUsers() {
   }
 }
 
+// Gets all users from the database that contain the provided Group Id
 async function getUsersByGroupId(groupId) {
   const client = new MongoClient(url);
 
@@ -45,6 +47,7 @@ async function getUsersByGroupId(groupId) {
   }
 }
 
+// Selects the user from the database with the provided Id
 async function findUserById(id) {
   const client = new MongoClient(url);
 
@@ -64,6 +67,7 @@ async function findUserById(id) {
   }
 }
 
+// Selects a user from the database with the provided username
 async function findUserByUsername(username) {
   const client = new MongoClient(url);
 
@@ -83,6 +87,7 @@ async function findUserByUsername(username) {
   }
 }
 
+// Creates a new user in the database
 async function createUser(user) {
   const client = new MongoClient(url);
 
@@ -105,6 +110,7 @@ async function createUser(user) {
   }
 }
 
+// Updates the user document in the database for the provided user
 async function updateUser(user) {
   const client = new MongoClient(url);
 
@@ -132,6 +138,7 @@ async function updateUser(user) {
   }
 }
 
+// Deletes a user from the database
 async function deleteUser(id) {
   const client = new MongoClient(url);
 

@@ -7,6 +7,7 @@ import { RefreshService } from '../Services/Refresh/refresh.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ChannelCreateModalComponent } from '../channel-create-modal/channel-create-modal.component';
 import { User } from '../models/user';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-channels',
@@ -22,12 +23,14 @@ export class ChannelsComponent implements OnInit, OnDestroy {
   superAdmin: boolean;
   sessionUser: User;
   createChannelModal: MdbModalRef<ChannelCreateModalComponent>;
+  ioConnection: any;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
     private refresh: RefreshService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -65,8 +68,26 @@ export class ChannelsComponent implements OnInit, OnDestroy {
 
     this.superAdmin =
       this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
+
+    this.innitIoConection();
   }
 
+  // innitialises the connection to the socket
+  private innitIoConection() {
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService
+      .getMessage()
+      .subscribe((message: string) => {
+        if (
+          message == 'newChannel:' + this.sessionGroup ||
+          message == 'deleteChannel:' + this.sessionGroup
+        ) {
+          this.getGroupChannels();
+        }
+      });
+  }
+
+  // Sets the current channel to the selceted channel
   setChannel(channel: string) {
     this.session.setChannel(channel);
 
@@ -76,11 +97,11 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     document.getElementById(channel)?.classList.add('highlight');
   }
 
+  // Deletes the current channel
   deleteChannel() {
     this.apiService.deleteChannel(this.sessionChannel).subscribe(
       () => {
-        let time = Date.now();
-        this.refresh.refreshChannels(time);
+        this.socketService.send('deleteChannel:' + this.sessionGroup);
         this.session.setChannel('');
       },
       (error) => {
@@ -89,6 +110,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Gets all channels of the current group
   getGroupChannels(): void {
     if (this.sessionGroup == '' || this.sessionGroup == undefined) {
       this.channels = [];
@@ -106,6 +128,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Opens a modal for creating a new channel
   createChannel(): void {
     this.createChannelModal = this.modalService.open(
       ChannelCreateModalComponent

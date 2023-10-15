@@ -8,6 +8,7 @@ import { RefreshService } from '../Services/Refresh/refresh.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { GroupCreateModalComponent } from '../group-create-modal/group-create-modal.component';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-groups',
@@ -24,20 +25,18 @@ export class GroupsComponent implements OnInit, OnDestroy {
   sessionGroup: Group;
   groupCreater: boolean;
   createGroupModal: MdbModalRef<GroupCreateModalComponent>;
+  ioConnection: any;
 
   constructor(
     private apiService: ApiService,
     private session: SessionService,
     private refresh: RefreshService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
     this.getGroups();
-
-    this.refresh.group$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      this.getGroups();
-    });
 
     this.session.role$.pipe(takeUntil(this.destroyed$)).subscribe((newRole) => {
       this.sessionUserRole = newRole;
@@ -49,8 +48,23 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.superAdmin =
       this.sessionUser.roles?.find((x) => x.name == 'Super Admin') != null;
+
+    this.innitIoConection();
   }
 
+  // Initialises the connection to the socket
+  private innitIoConection() {
+    this.socketService.initSocket();
+    this.ioConnection = this.socketService
+      .getMessage()
+      .subscribe((message: string) => {
+        if (message == 'newGroup' || message == 'deleteGroup') {
+          this.getGroups();
+        }
+      });
+  }
+
+  // Sets the selected grup as the current group
   setGroup(group: string) {
     this.session.setGroup(group);
     document.querySelectorAll('.group-item')?.forEach((element) => {
@@ -62,11 +76,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.groupCreater = this.sessionGroup?.creater == this.sessionUser._id;
   }
 
+  // Deletes the current group
   deleteGroup() {
     this.apiService.deleteGroup(this.sessionGroup._id).subscribe(
       () => {
-        let time = Date.now();
-        this.refresh.refreshGroups(time);
+        this.socketService.send('deleteGroup');
         this.session.setGroup('');
       },
       (error) => {
@@ -75,6 +89,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Gets a lit of groups
   getGroups(): void {
     this.apiService.getGroups().subscribe(
       (groups: Array<Group>) => {
@@ -87,6 +102,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Opens a modal for creating a new group
   createGroup(): void {
     this.createGroupModal = this.modalService.open(GroupCreateModalComponent);
   }

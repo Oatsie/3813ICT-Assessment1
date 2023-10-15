@@ -5,6 +5,7 @@ import { RefreshService } from '../Services/Refresh/refresh.service';
 import { SessionService } from '../Services/Session/session.service';
 import { User } from '../models/user';
 import { Subject, takeUntil } from 'rxjs';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-group-create-modal',
@@ -18,7 +19,8 @@ export class GroupCreateModalComponent implements OnInit, OnDestroy {
     public modalRef: MdbModalRef<GroupCreateModalComponent>,
     private apiService: ApiService,
     private refresh: RefreshService,
-    private session: SessionService
+    private session: SessionService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit() {
@@ -30,6 +32,7 @@ export class GroupCreateModalComponent implements OnInit, OnDestroy {
     this.modalRef.close();
   }
 
+  // Creates a new group
   createGroup(): void {
     const groupname = document.getElementById(
       'groupNameInput'
@@ -50,6 +53,8 @@ export class GroupCreateModalComponent implements OnInit, OnDestroy {
               console.error(error);
             }
           );
+
+          this.socketService.send('newGroup');
 
           let time = Date.now();
           this.refresh.refreshGroups(time);

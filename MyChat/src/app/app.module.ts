@@ -14,6 +14,7 @@ import { GroupCreateModalComponent } from './group-create-modal/group-create-mod
 import { ChannelCreateModalComponent } from './channel-create-modal/channel-create-modal.component';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { UserEditModalComponent } from './user-edit-modal/user-edit-modal.component';
+import { SocketService } from './Services/Socket/socket.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { UserEditModalComponent } from './user-edit-modal/user-edit-modal.compon
     LoginModule,
     AppRoutingModule,
   ],
-  providers: [MdbModalService],
+  providers: [MdbModalService, SocketService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

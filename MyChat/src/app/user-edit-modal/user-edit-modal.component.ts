@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 import { User } from '../models/user';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { ApiService } from '../Services/API/api.service';
-import { RefreshService } from '../Services/Refresh/refresh.service';
-import { CommonModule } from '@angular/common';
+import { SocketService } from '../Services/Socket/socket.service';
 
 @Component({
   selector: 'app-user-edit-modal',
@@ -19,33 +18,39 @@ export class UserEditModalComponent {
   constructor(
     public modalRef: MdbModalRef<UserEditModalComponent>,
     private apiService: ApiService,
-    private refresh: RefreshService
+    private socketService: SocketService
   ) {}
 
   close() {
     this.modalRef.close();
   }
 
+  // Sets role to User
   userRoleSelected() {
     this.role = 'User';
   }
 
+  // Sets role to Group Admin
   groupRoleSelected() {
     this.role = 'Group Admin';
   }
 
+  // Sets role to Super Admin
   superRoleSelected() {
     this.role = 'Super Admin';
   }
 
+  // Sets user to be removed from group
   yesSelected() {
     this.removeGroup = true;
   }
 
+  // Sets user to not be removed from Group
   noSelected() {
     this.removeGroup = false;
   }
 
+  // Updates the user details
   editUser() {
     if (this.removeGroup) {
       let roleIndex = this.user.roles?.findIndex(
@@ -59,8 +64,7 @@ export class UserEditModalComponent {
 
       this.apiService.updateUser(this.user).subscribe(
         () => {
-          let time = Date.now();
-          this.refresh.refreshUsers(time);
+          this.socketService.send('editUser:' + this.sessionGroup);
         },
         (error) => {
           console.error(error);
@@ -78,8 +82,7 @@ export class UserEditModalComponent {
 
     this.apiService.updateUser(this.user).subscribe(
       () => {
-        let time = Date.now();
-        this.refresh.refreshUsers(time);
+        this.socketService.send('editUser:' + this.sessionGroup);
       },
       (error) => {
         console.error(error);
